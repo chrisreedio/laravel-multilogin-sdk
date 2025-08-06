@@ -13,6 +13,8 @@ use ChrisReedIO\MultiloginSDK\Resource\ProfileManagement;
 use ChrisReedIO\MultiloginSDK\Resource\Proxy;
 use ChrisReedIO\MultiloginSDK\Resource\ScriptRunner;
 use ChrisReedIO\MultiloginSDK\Resource\TwoFactor;
+use Illuminate\Support\Facades\Cache;
+use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\Connector;
 
 /**
@@ -20,7 +22,53 @@ use Saloon\Http\Connector;
  */
 class MultiloginSDK extends Connector
 {
-    public function __construct() {}
+    protected string $token;
+
+    public function __construct(protected ?string $email = null)
+    {
+        $this->email ??= Cache::get('multilogin_email') ?? config('multilogin.email');
+    }
+
+    protected function defaultAuth(): ?TokenAuthenticator
+    {
+        // If no email is provided, return null
+        if ($this->email === null) {
+            return null;
+        }
+
+        // Check the cache for a multilogin_access_token
+        $accessToken = Cache::get('multilogin_access_token');
+        $refreshToken = Cache::get('multilogin_refresh_token');
+
+        // If no access token or refresh token is found, return null
+        if (! $accessToken || ! $refreshToken) {
+            return null;
+        }
+
+        // Refresh the access token if it's expired and a refresh token is present
+        if ($accessToken === null && $refreshToken !== null) {
+            // Call the refresh token endpoint
+            $response = $this->profileAccessManagement()->userRefreshTokenSwitchWorkspace($this->email, $refreshToken);
+
+            // If the response is not successful, return null
+            if ($response->failed()) {
+                return null;
+            }
+
+            // Get the data from the response
+            $data = $response->json('data');
+            $accessToken = $data['accessToken'];
+            $refreshToken = $data['refreshToken'];
+
+            // Cache the access token for 15 minutes
+            Cache::put('multilogin_access_token', $accessToken, 60 * 15);
+            // Cache the refresh token indefinitely
+            Cache::put('multilogin_refresh_token', $refreshToken);
+        }
+
+        // Return the authenticator
+        return new TokenAuthenticator($accessToken);
+    }
 
     public function resolveBaseUrl(): string
     {
