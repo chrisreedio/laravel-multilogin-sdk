@@ -1,0 +1,32 @@
+<?php
+
+namespace ChrisReedIO\MultiloginSDK\Requests\Launcher;
+
+use DateTime;
+use Saloon\Enums\Method;
+use Saloon\Http\Request;
+
+/**
+ * Get All Quick Profiles Status
+ */
+class GetAllQuickProfilesStatus extends Request
+{
+	protected Method $method = Method::GET;
+
+
+	public function resolveEndpoint(): string
+	{
+		return "/api/v1/profile/quick/statuses";
+	}
+
+
+	public function __construct()
+	{
+	}
+
+
+	public function defaultHeaders(): array
+	{
+		return array_filter([]);
+	}
+}
