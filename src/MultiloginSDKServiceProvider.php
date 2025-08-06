@@ -2,9 +2,9 @@
 
 namespace ChrisReedIO\MultiloginSDK;
 
+use ChrisReedIO\MultiloginSDK\Commands\MultiloginSDKCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use ChrisReedIO\MultiloginSDK\Commands\MultiloginSDKCommand;
 
 class MultiloginSDKServiceProvider extends PackageServiceProvider
 {
