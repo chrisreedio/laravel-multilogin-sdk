@@ -4,6 +4,7 @@ namespace ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement;
 
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
+use Saloon\Http\Auth\NullAuthenticator;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
@@ -45,5 +46,10 @@ class UserSignIn extends Request implements HasBody
     public function defaultHeaders(): array
     {
         return array_filter([]);
+    }
+
+    public function defaultAuth(): ?NullAuthenticator
+    {
+        return new NullAuthenticator;
     }
 }

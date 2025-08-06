@@ -33,25 +33,37 @@ class MultiloginSDK extends Connector
     {
         // If no email is provided, return null
         if ($this->email === null) {
+            // dump('No email provided');
+
             return null;
         }
 
         // Check the cache for a multilogin_access_token
         $accessToken = Cache::get('multilogin_access_token');
         $refreshToken = Cache::get('multilogin_refresh_token');
+        $expiresAt = Cache::get('multilogin_expires_at');
 
         // If no access token or refresh token is found, return null
-        if (! $accessToken || ! $refreshToken) {
+        if ($accessToken === null && $refreshToken === null) {
+            // dump('No access token or refresh token found');
+
             return null;
         }
 
         // Refresh the access token if it's expired and a refresh token is present
-        if ($accessToken === null && $refreshToken !== null) {
+        if ($accessToken !== null && $refreshToken !== null && $expiresAt !== null && $expiresAt < time()) {
+            // dump('Refreshing access token');
             // Call the refresh token endpoint
-            $response = $this->profileAccessManagement()->userRefreshTokenSwitchWorkspace($this->email, $refreshToken);
+            // new Connector
+            $connector = new self($this->email);
+            $connector->authenticate(new TokenAuthenticator($accessToken));
+            $response = $connector->profileAccessManagement()->userRefreshTokenSwitchWorkspace($this->email, $refreshToken);
 
             // If the response is not successful, return null
             if ($response->failed()) {
+                // dump('Failed to refresh access token');
+                // dd($response->json());
+
                 return null;
             }
 
@@ -59,6 +71,7 @@ class MultiloginSDK extends Connector
             $data = $response->json('data');
             $accessToken = $data['accessToken'];
             $refreshToken = $data['refreshToken'];
+            // dd($data);
 
             // Cache the access token for 15 minutes
             Cache::put('multilogin_access_token', $accessToken, 60 * 15);
