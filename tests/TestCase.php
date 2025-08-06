@@ -2,9 +2,9 @@
 
 namespace ChrisReedIO\MultiloginSDK\Tests;
 
+use ChrisReedIO\MultiloginSDK\MultiloginSDKServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use ChrisReedIO\MultiloginSDK\MultiloginSDKServiceProvider;
 
 class TestCase extends Orchestra
 {
