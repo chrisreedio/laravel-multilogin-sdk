@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace ChrisReedIO\MultiloginSDK\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class MultiloginSDKCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-multilogin-sdk';
 
     public $description = 'My command';
 

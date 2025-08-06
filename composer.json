@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "chrisreedio/laravel-multilogin-sdk",
+    "description": "Provides a Laravel SDK for the Multilogin API.",
     "keywords": [
-        ":vendor_name",
+        "Chris Reed",
         "laravel",
-        ":package_slug"
+        "laravel-multilogin-sdk"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/chrisreedio/laravel-multilogin-sdk",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Chris Reed",
+            "email": "chris@reedtech.us",
             "role": "Developer"
         }
     ],
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "ChrisReedIO\\MultiloginSDK\\": "src/",
+            "ChrisReedIO\\MultiloginSDK\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "ChrisReedIO\\MultiloginSDK\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "ChrisReedIO\\MultiloginSDK\\MultiloginSDKServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "MultiloginSDK": "ChrisReedIO\\MultiloginSDK\\Facades\\MultiloginSDK"
             }
         }
     },
