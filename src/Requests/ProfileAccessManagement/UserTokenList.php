@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement;
 
-use DateTime;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -11,22 +10,17 @@ use Saloon\Http\Request;
  */
 class UserTokenList extends Request
 {
-	protected Method $method = Method::GET;
+    protected Method $method = Method::GET;
 
+    public function resolveEndpoint(): string
+    {
+        return '/user/tokens_list';
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/user/tokens_list";
-	}
+    public function __construct() {}
 
-
-	public function __construct()
-	{
-	}
-
-
-	public function defaultHeaders(): array
-	{
-		return array_filter([]);
-	}
+    public function defaultHeaders(): array
+    {
+        return array_filter([]);
+    }
 }

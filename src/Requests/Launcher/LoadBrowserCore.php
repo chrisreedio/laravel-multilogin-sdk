@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\Launcher;
 
-use DateTime;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -11,36 +10,31 @@ use Saloon\Http\Request;
  */
 class LoadBrowserCore extends Request
 {
-	protected Method $method = Method::GET;
+    protected Method $method = Method::GET;
 
+    public function resolveEndpoint(): string
+    {
+        return '/api/v1/load_browser_core';
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/api/v1/load_browser_core";
-	}
+    /**
+     * @param  null|string  $browserType  `Required`. Specify the browser type. Defaults to `mimic`
+     * @param  null|string  $version  `Required`. Specify the core version. Defaults to `latest`.
+     * @param  null|string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     */
+    public function __construct(
+        protected ?string $browserType = null,
+        protected ?string $version = null,
+        protected ?string $xStrictMode = null,
+    ) {}
 
+    public function defaultQuery(): array
+    {
+        return array_filter(['browser_type' => $this->browserType, 'version' => $this->version]);
+    }
 
-	/**
-	 * @param null|string $browserType `Required`. Specify the browser type. Defaults to `mimic`
-	 * @param null|string $version `Required`. Specify the core version. Defaults to `latest`.
-	 * @param null|string $xStrictMode Default to false. If set to true, you must specify values for all required parameters.
-	 */
-	public function __construct(
-		protected ?string $browserType = null,
-		protected ?string $version = null,
-		protected ?string $xStrictMode = null,
-	) {
-	}
-
-
-	public function defaultQuery(): array
-	{
-		return array_filter(['browser_type' => $this->browserType, 'version' => $this->version]);
-	}
-
-
-	public function defaultHeaders(): array
-	{
-		return array_filter(['X-Strict-Mode' => $this->xStrictMode]);
-	}
+    public function defaultHeaders(): array
+    {
+        return array_filter(['X-Strict-Mode' => $this->xStrictMode]);
+    }
 }

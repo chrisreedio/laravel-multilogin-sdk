@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement;
 
-use DateTime;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -13,46 +12,40 @@ use Saloon\Traits\Body\HasJsonBody;
  */
 class WorkspaceCreateFolder extends Request implements HasBody
 {
-	use HasJsonBody;
+    use HasJsonBody;
 
-	protected Method $method = Method::POST;
+    protected Method $method = Method::POST;
 
+    public function resolveEndpoint(): string
+    {
+        return '/workspace/folder_create';
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/workspace/folder_create";
-	}
+    /**
+     * @param  null|mixed  $name
+     * @param  null|mixed  $comment
+     * @param  null|string  $name  `Required`. Name your folder. Defaults to `"New Folder"`.
+     * @param  null|string  $comment  `Optional`. Add comments if necessary. Defaults to empty string `""`.
+     * @param  null|string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     */
+    public function __construct(
+        protected ?string $name = null,
+        protected ?string $comment = null,
+        protected ?string $xStrictMode = null,
+    ) {}
 
+    public function defaultBody(): array
+    {
+        return array_filter(['name' => $this->name, 'comment' => $this->comment]);
+    }
 
-	/**
-	 * @param null|mixed $name
-	 * @param null|mixed $comment
-	 * @param null|string $name `Required`. Name your folder. Defaults to `"New Folder"`.
-	 * @param null|string $comment `Optional`. Add comments if necessary. Defaults to empty string `""`.
-	 * @param null|string $xStrictMode Default to false. If set to true, you must specify values for all required parameters.
-	 */
-	public function __construct(
-		protected ?string $name = null,
-		protected ?string $comment = null,
-		protected ?string $xStrictMode = null,
-	) {
-	}
+    public function defaultQuery(): array
+    {
+        return array_filter(['name' => $this->name, 'comment' => $this->comment]);
+    }
 
-
-	public function defaultBody(): array
-	{
-		return array_filter(['name' => $this->name, 'comment' => $this->comment]);
-	}
-
-
-	public function defaultQuery(): array
-	{
-		return array_filter(['name' => $this->name, 'comment' => $this->comment]);
-	}
-
-
-	public function defaultHeaders(): array
-	{
-		return array_filter(['X-Strict-Mode' => $this->xStrictMode]);
-	}
+    public function defaultHeaders(): array
+    {
+        return array_filter(['X-Strict-Mode' => $this->xStrictMode]);
+    }
 }

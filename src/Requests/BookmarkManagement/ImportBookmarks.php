@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\BookmarkManagement;
 
-use DateTime;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -13,32 +12,27 @@ use Saloon\Traits\Body\HasJsonBody;
  */
 class ImportBookmarks extends Request implements HasBody
 {
-	use HasJsonBody;
+    use HasJsonBody;
 
-	protected Method $method = Method::POST;
+    protected Method $method = Method::POST;
 
+    public function resolveEndpoint(): string
+    {
+        return "/api/v1/profile/{$this->profile}/bookmarks/import";
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/api/v1/profile/{$this->profile}/bookmarks/import";
-	}
+    /**
+     * @param  null|string  $paths  `Required`. Path to a JSON file containing bookmarks
+     * @param  null|string  $operation  `Required`. Specify what to do with exported bookmarks.
+     */
+    public function __construct(
+        protected string $profile,
+        protected ?string $paths = null,
+        protected ?string $operation = null,
+    ) {}
 
-
-	/**
-	 * @param string $profile
-	 * @param null|string $paths `Required`. Path to a JSON file containing bookmarks
-	 * @param null|string $operation `Required`. Specify what to do with exported bookmarks.
-	 */
-	public function __construct(
-		protected string $profile,
-		protected ?string $paths = null,
-		protected ?string $operation = null,
-	) {
-	}
-
-
-	public function defaultQuery(): array
-	{
-		return array_filter(['paths' => $this->paths, 'operation' => $this->operation]);
-	}
+    public function defaultQuery(): array
+    {
+        return array_filter(['paths' => $this->paths, 'operation' => $this->operation]);
+    }
 }

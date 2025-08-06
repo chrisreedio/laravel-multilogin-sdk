@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ScriptRunner;
 
-use DateTime;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -11,36 +10,26 @@ use Saloon\Http\Request;
  */
 class StartBrowserProfileWithSelenium extends Request
 {
-	protected Method $method = Method::GET;
+    protected Method $method = Method::GET;
 
+    public function resolveEndpoint(): string
+    {
+        return "/api/v1/profile/f/{$this->folderId}/p/{$this->profileId}/start";
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/api/v1/profile/f/{$this->folderId}/p/{$this->profileId}/start";
-	}
+    public function __construct(
+        protected string $folderId,
+        protected string $profileId,
+        protected ?string $automationType = null,
+    ) {}
 
+    public function defaultQuery(): array
+    {
+        return array_filter(['automation_type' => $this->automationType]);
+    }
 
-	/**
-	 * @param string $folderId
-	 * @param string $profileId
-	 * @param null|string $automationType
-	 */
-	public function __construct(
-		protected string $folderId,
-		protected string $profileId,
-		protected ?string $automationType = null,
-	) {
-	}
-
-
-	public function defaultQuery(): array
-	{
-		return array_filter(['automation_type' => $this->automationType]);
-	}
-
-
-	public function defaultHeaders(): array
-	{
-		return array_filter([]);
-	}
+    public function defaultHeaders(): array
+    {
+        return array_filter([]);
+    }
 }

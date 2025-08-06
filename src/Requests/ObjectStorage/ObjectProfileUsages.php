@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ObjectStorage;
 
-use DateTime;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -11,26 +10,22 @@ use Saloon\Http\Request;
  */
 class ObjectProfileUsages extends Request
 {
-	protected Method $method = Method::GET;
+    protected Method $method = Method::GET;
 
+    public function resolveEndpoint(): string
+    {
+        return '/api/v1/resources/object_profile_usages';
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/api/v1/resources/object_profile_usages";
-	}
+    /**
+     * @param  null|string  $objectId  `Required`
+     */
+    public function __construct(
+        protected ?string $objectId = null,
+    ) {}
 
-
-	/**
-	 * @param null|string $objectId `Required`
-	 */
-	public function __construct(
-		protected ?string $objectId = null,
-	) {
-	}
-
-
-	public function defaultQuery(): array
-	{
-		return array_filter(['object_id' => $this->objectId]);
-	}
+    public function defaultQuery(): array
+    {
+        return array_filter(['object_id' => $this->objectId]);
+    }
 }

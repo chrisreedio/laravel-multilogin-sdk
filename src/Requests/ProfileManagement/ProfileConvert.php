@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ProfileManagement;
 
-use DateTime;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -13,38 +12,32 @@ use Saloon\Traits\Body\HasJsonBody;
  */
 class ProfileConvert extends Request implements HasBody
 {
-	use HasJsonBody;
+    use HasJsonBody;
 
-	protected Method $method = Method::POST;
+    protected Method $method = Method::POST;
 
+    public function resolveEndpoint(): string
+    {
+        return "/api/v1/profile/{$this->profileId}/convert";
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/api/v1/profile/{$this->profileId}/convert";
-	}
+    /**
+     * @param  null|string  $convertToLocal  `Required`. True if you want to convert from cloud to local and false otherwise.
+     * @param  null|string  $workspaceId  `Required`. Specify the workspace id.
+     */
+    public function __construct(
+        protected string $profileId,
+        protected ?string $convertToLocal = null,
+        protected ?string $workspaceId = null,
+    ) {}
 
+    public function defaultQuery(): array
+    {
+        return array_filter(['convert_to_local' => $this->convertToLocal, 'workspace_id' => $this->workspaceId]);
+    }
 
-	/**
-	 * @param string $profileId
-	 * @param null|string $convertToLocal `Required`. True if you want to convert from cloud to local and false otherwise.
-	 * @param null|string $workspaceId `Required`. Specify the workspace id.
-	 */
-	public function __construct(
-		protected string $profileId,
-		protected ?string $convertToLocal = null,
-		protected ?string $workspaceId = null,
-	) {
-	}
-
-
-	public function defaultQuery(): array
-	{
-		return array_filter(['convert_to_local' => $this->convertToLocal, 'workspace_id' => $this->workspaceId]);
-	}
-
-
-	public function defaultHeaders(): array
-	{
-		return array_filter([]);
-	}
+    public function defaultHeaders(): array
+    {
+        return array_filter([]);
+    }
 }

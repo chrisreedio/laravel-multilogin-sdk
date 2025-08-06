@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ObjectStorage;
 
-use DateTime;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -11,16 +10,12 @@ use Saloon\Http\Request;
  */
 class GetStatisticsForObjects extends Request
 {
-	protected Method $method = Method::GET;
+    protected Method $method = Method::GET;
 
+    public function resolveEndpoint(): string
+    {
+        return '/api/v1/resources/statistics';
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/api/v1/resources/statistics";
-	}
-
-
-	public function __construct()
-	{
-	}
+    public function __construct() {}
 }

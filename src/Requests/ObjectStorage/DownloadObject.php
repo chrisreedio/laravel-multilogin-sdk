@@ -2,7 +2,6 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ObjectStorage;
 
-use DateTime;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -11,26 +10,22 @@ use Saloon\Http\Request;
  */
 class DownloadObject extends Request
 {
-	protected Method $method = Method::GET;
+    protected Method $method = Method::GET;
 
+    public function resolveEndpoint(): string
+    {
+        return '/api/v1/object_storage/<id_upload>/download';
+    }
 
-	public function resolveEndpoint(): string
-	{
-		return "/api/v1/object_storage/<id_upload>/download";
-	}
+    /**
+     * @param  null|string  $idUpload  `Required`. Specify the id of the object.
+     */
+    public function __construct(
+        protected ?string $idUpload = null,
+    ) {}
 
-
-	/**
-	 * @param null|string $idUpload `Required`. Specify the id of the object.
-	 */
-	public function __construct(
-		protected ?string $idUpload = null,
-	) {
-	}
-
-
-	public function defaultQuery(): array
-	{
-		return array_filter(['id_upload' => $this->idUpload]);
-	}
+    public function defaultQuery(): array
+    {
+        return array_filter(['id_upload' => $this->idUpload]);
+    }
 }

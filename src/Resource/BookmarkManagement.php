@@ -10,39 +10,30 @@ use Saloon\Http\Response;
 
 class BookmarkManagement extends BaseResource
 {
-	/**
-	 * @param string $profileId
-	 */
-	public function exportBookmarks(string $profileId): Response
-	{
-		return $this->connector->send(new ExportBookmarks($profileId));
-	}
+    public function exportBookmarks(string $profileId): Response
+    {
+        return $this->connector->send(new ExportBookmarks($profileId));
+    }
 
+    /**
+     * @param  string  $paths  `Required`. Path to a JSON file containing bookmarks
+     * @param  string  $operation  `Required`. Specify what to do with exported bookmarks.
+     */
+    public function importBookmarks(string $profile, ?string $paths = null, ?string $operation = null): Response
+    {
+        return $this->connector->send(new ImportBookmarks($profile, $paths, $operation));
+    }
 
-	/**
-	 * @param string $profile
-	 * @param string $paths `Required`. Path to a JSON file containing bookmarks
-	 * @param string $operation `Required`. Specify what to do with exported bookmarks.
-	 */
-	public function importBookmarks(string $profile, ?string $paths = null, ?string $operation = null): Response
-	{
-		return $this->connector->send(new ImportBookmarks($profile, $paths, $operation));
-	}
-
-
-	/**
-	 * @param string $profileId
-	 * @param string $sourceProfileId
-	 * @param string $paths `Required`. Path to a JSON file containing bookmarks.
-	 * @param string $operation `Required`. Specify what to do with exported bookmarks.
-	 */
-	public function copyBookmarks(
-		string $profileId,
-		string $sourceProfileId,
-		?string $paths = null,
-		?string $operation = null,
-	): Response
-	{
-		return $this->connector->send(new CopyBookmarks($profileId, $sourceProfileId, $paths, $operation));
-	}
+    /**
+     * @param  string  $paths  `Required`. Path to a JSON file containing bookmarks.
+     * @param  string  $operation  `Required`. Specify what to do with exported bookmarks.
+     */
+    public function copyBookmarks(
+        string $profileId,
+        string $sourceProfileId,
+        ?string $paths = null,
+        ?string $operation = null,
+    ): Response {
+        return $this->connector->send(new CopyBookmarks($profileId, $sourceProfileId, $paths, $operation));
+    }
 }
