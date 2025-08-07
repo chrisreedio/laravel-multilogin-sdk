@@ -17,6 +17,7 @@ use ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement\WorkspaceRemoveFo
 use ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement\WorkspaceRestrictions;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement\WorkspaceStatistics;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement\WorkspaceUpdateFolder;
+use Illuminate\Support\Facades\Cache;
 use Saloon\Http\BaseResource;
 use Saloon\Http\Response;
 
@@ -34,7 +35,24 @@ class ProfileAccessManagement extends BaseResource
         ?string $contentType = null,
         ?string $accept = null,
     ): Response {
-        return $this->connector->send(new UserSignIn($email, $password, $email, $password, $contentType, $accept));
+        $response = $this->connector->send(new UserSignIn($email, $password, $email, $password, $contentType, $accept));
+
+        if ($response->failed()) {
+            return $response;
+        }
+
+        $data = $response->json('data');
+        $accessToken = $data['token'];
+        $refreshToken = $data['refresh_token'];
+
+        // Cache the tokens in redis
+        // Access token expires in 15 minutes, refresh has no expiration
+        Cache::put('multilogin_email', $email);
+        Cache::put('multilogin_access_token', $accessToken);
+        Cache::put('multilogin_access_token_expires_at', now()->addMinutes(15));
+        Cache::put('multilogin_refresh_token', $refreshToken);
+
+        return $response;
     }
 
     /**
@@ -54,7 +72,21 @@ class ProfileAccessManagement extends BaseResource
         ?string $accept = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new UserRefreshTokenSwitchWorkspace($email, $refreshToken, $workspaceId, $email, $refreshToken, $workspaceId, $contentType, $accept, $xStrictMode));
+        $response = $this->connector->send(new UserRefreshTokenSwitchWorkspace($email, $refreshToken, $workspaceId, $email, $refreshToken, $workspaceId, $contentType, $accept, $xStrictMode));
+
+        if ($response->failed()) {
+            return $response;
+        }
+
+        $data = $response->json('data');
+        $accessToken = $data['token'];
+        $refreshToken = $data['refresh_token'];
+
+        Cache::put('multilogin_access_token', $accessToken);
+        Cache::put('multilogin_access_token_expires_at', now()->addMinutes(15));
+        Cache::put('multilogin_refresh_token', $refreshToken);
+
+        return $response;
     }
 
     /**

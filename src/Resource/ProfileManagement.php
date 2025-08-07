@@ -16,6 +16,7 @@ use ChrisReedIO\MultiloginSDK\Requests\ProfileManagement\ProfileUpdate;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileManagement\ScreenResolution;
 use Saloon\Http\BaseResource;
 use Saloon\Http\Response;
+use Saloon\PaginationPlugin\Paginator;
 
 class ProfileManagement extends BaseResource
 {
@@ -80,7 +81,7 @@ class ProfileManagement extends BaseResource
      * @param  string  $maxTouchPoints  `Optional` for `fingerprint` with `android` os. Default is 5.
      * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
-    public function profileCreate(
+    public function create(
         ?string $name = null,
         ?string $browserType = null,
         ?string $folderId = null,
@@ -143,10 +144,10 @@ class ProfileManagement extends BaseResource
     }
 
     /**
-     * @param  string  $isRemoved  `Required`. Specify which type of profiles to search from. Defaults to `false`.
-     * @param  string  $limit  `Required`. Specify the number of profiles to search. Defaults to `10`.
-     * @param  string  $offset  `Required`. Specify the number of profiles to skip from the beginning of the returned data before displaying the results. 0 means starting from the beginning. Defaults to `0`.
      * @param  string  $searchText  `Required`. Search profiles by name. `maxLength`: 50 characters. An empty string searches from all the profiles.
+     * @param  string  $isRemoved  `Required`. Specify which type of profiles to search from. Defaults to `false`.
+    //  * @param  string  $limit  `Required`. Specify the number of profiles to search. Defaults to `10`.
+    //  * @param  string  $offset  `Required`. Specify the number of profiles to skip from the beginning of the returned data before displaying the results. 0 means starting from the beginning. Defaults to `0`.
      * @param  string  $storageType  `Required`. Specify the storage type of profiles to search.
      * @param  string  $folderId  `Optional`. Specify the folder in which searching is done
      * @param  string  $sort  `Optional`.  Specify the order order of sorting. Defaults to `asc`.
@@ -164,11 +165,11 @@ class ProfileManagement extends BaseResource
      * @param  string  $createdBy  `Optional`. Specify the email.
      * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
-    public function profileSearch(
+    public function search(
+        ?string $searchText = '',
         ?string $isRemoved = null,
-        ?string $limit = null,
-        ?string $offset = null,
-        ?string $searchText = null,
+        // ?string $limit = null,
+        // ?string $offset = null,
         ?string $storageType = null,
         ?string $folderId = null,
         ?string $sort = null,
@@ -187,8 +188,11 @@ class ProfileManagement extends BaseResource
         ?string $contentType = null,
         ?string $accept = null,
         ?string $xStrictMode = null,
-    ): Response {
-        return $this->connector->send(new ProfileSearch($isRemoved, $limit, $offset, $searchText, $storageType, $folderId, $sort, $coreVersion, $createdFrom, $createdTo, $updatedFrom, $updatedTo, $lastLaunchedFrom, $lastLaunchedTo, $lastLaunchedBy, $lastLaunchedOn, $lastUpdatedBy, $inUseBy, $createdBy, $contentType, $accept, $xStrictMode));
+    ): Paginator {
+        $request = new ProfileSearch($searchText, $isRemoved, $storageType, $folderId, $sort, $coreVersion, $createdFrom, $createdTo, $updatedFrom, $updatedTo, $lastLaunchedFrom, $lastLaunchedTo, $lastLaunchedBy, $lastLaunchedOn, $lastUpdatedBy, $inUseBy, $createdBy, $contentType, $accept, $xStrictMode);
+
+        // return $this->connector->send($request);
+        return $request->paginate($this->connector);
     }
 
     /**
@@ -196,7 +200,7 @@ class ProfileManagement extends BaseResource
      * @param  string  $permanently  `Required`. Specify the value to delete profiles perminantly or not. Defaults to `false`.
      * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
-    public function profileRemove(
+    public function remove(
         ?string $ids = null,
         ?string $permanently = null,
         ?string $contentType = null,
@@ -260,7 +264,7 @@ class ProfileManagement extends BaseResource
      * @param  string  $notes  `Optional`. Add notes to your profiles.
      * @param  string  $maxTouchPoints  `Optional` for `fingerprint` with `android` os. Default is 5.
      */
-    public function profileUpdate(
+    public function update(
         ?string $autoUpdateCore = null,
         ?string $coreVersion = null,
         ?string $coreMinorVersion = null,
@@ -324,7 +328,7 @@ class ProfileManagement extends BaseResource
      * @param  string  $destFolderId  `Required`. Specify the folder, to which profiles will be moved.
      * @param  string  $ids  `Required`. Provide a list of profiles to be moved. Max number of IDs is 20.
      */
-    public function profileMove(
+    public function move(
         ?string $destFolderId = null,
         ?string $ids = null,
         ?string $contentType = null,
@@ -387,7 +391,7 @@ class ProfileManagement extends BaseResource
      * @param  string  $cmdParams  `Optional` for `fingerprint`. Specify command line parameters for browsers.
      * @param  string  $maxTouchPoints  `Optional` for `fingerprint` with `android` os. Default is 5.
      */
-    public function profilePartialUpdate(
+    public function partialUpdate(
         ?string $profileId = null,
         ?string $name = null,
         ?string $autoUpdateCore = null,
@@ -449,7 +453,7 @@ class ProfileManagement extends BaseResource
      * @param  mixed  $ids
      * @param  string  $ids  `Required`. Specify the ID of the profile you would like to restore.
      */
-    public function profileRestore(?string $ids = null, ?string $contentType = null, ?string $accept = null): Response
+    public function restore(?string $ids = null, ?string $contentType = null, ?string $accept = null): Response
     {
         return $this->connector->send(new ProfileRestore($ids, $ids, $contentType, $accept));
     }
@@ -458,15 +462,15 @@ class ProfileManagement extends BaseResource
      * @param  mixed  $ids
      * @param  string  $ids  `Required`. Specify the ID of the profile, which metas you would like to fetch.
      */
-    public function profileMetas(?string $ids = null, ?string $contentType = null, ?string $accept = null): Response
+    public function metas(?string $ids = null): Response
     {
-        return $this->connector->send(new ProfileMetas($ids, $ids, $contentType, $accept));
+        return $this->connector->send(new ProfileMetas($ids));
     }
 
     /**
      * @param  string  $metaId  `Required`. Specify the profile id.
      */
-    public function profileSummary(?string $metaId = null, ?string $contentType = null, ?string $accept = null): Response
+    public function summary(?string $metaId = null, ?string $contentType = null, ?string $accept = null): Response
     {
         return $this->connector->send(new ProfileSummary($metaId, $contentType, $accept));
     }
@@ -476,7 +480,7 @@ class ProfileManagement extends BaseResource
      * @param  string  $times  `Required`. Specify the number of profiles you would like to clone. Defaults to `1`.
      * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
-    public function profileClone(
+    public function clone(
         ?string $profileId = null,
         ?string $times = null,
         ?string $contentType = null,
@@ -490,7 +494,7 @@ class ProfileManagement extends BaseResource
      * @param  string  $convertToLocal  `Required`. True if you want to convert from cloud to local and false otherwise.
      * @param  string  $workspaceId  `Required`. Specify the workspace id.
      */
-    public function profileConvert(
+    public function convert(
         string $profileId,
         ?string $convertToLocal = null,
         ?string $workspaceId = null,

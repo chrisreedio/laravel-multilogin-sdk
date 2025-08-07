@@ -4,13 +4,19 @@ namespace ChrisReedIO\MultiloginSDK\Requests\ProfileManagement;
 
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
+use Saloon\Http\Connector;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
+use Saloon\PaginationPlugin\Contracts\HasRequestPagination;
+use Saloon\PaginationPlugin\Contracts\Paginatable;
+use Saloon\PaginationPlugin\OffsetPaginator;
+use Saloon\PaginationPlugin\Paginator;
 use Saloon\Traits\Body\HasJsonBody;
 
 /**
  * Profile Search
  */
-class ProfileSearch extends Request implements HasBody
+class ProfileSearch extends Request implements HasBody, HasRequestPagination, Paginatable
 {
     use HasJsonBody;
 
@@ -44,10 +50,10 @@ class ProfileSearch extends Request implements HasBody
      * @param  null|string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function __construct(
+        protected string $searchText = '',
         protected ?string $isRemoved = null,
-        protected ?string $limit = null,
-        protected ?string $offset = null,
-        protected ?string $searchText = null,
+        // protected ?string $limit = null,
+        // protected ?string $offset = null,
         protected ?string $storageType = null,
         protected ?string $folderId = null,
         protected ?string $sort = null,
@@ -66,12 +72,12 @@ class ProfileSearch extends Request implements HasBody
         protected ?string $xStrictMode = null,
     ) {}
 
-    public function defaultQuery(): array
+    public function defaultBody(): array
     {
-        return array_filter([
-            'is_removed' => $this->isRemoved,
-            'limit' => $this->limit,
-            'offset' => $this->offset,
+        $data = [
+            'is_removed' => $this->isRemoved ?? false,
+            // 'limit' => $this->limit ?? 100,
+            // 'offset' => $this->offset,
             'search_text' => $this->searchText,
             'storage_type' => $this->storageType,
             'folder_id' => $this->folderId,
@@ -88,11 +94,34 @@ class ProfileSearch extends Request implements HasBody
             'last_updated_by' => $this->lastUpdatedBy,
             'in_use_by' => $this->inUseBy,
             'created_by' => $this->createdBy,
-        ]);
+        ];
+
+        $data = array_filter($data, fn ($value) => $value !== null);
+
+        return $data;
     }
 
     public function defaultHeaders(): array
     {
         return array_filter(['X-Strict-Mode' => $this->xStrictMode]);
+    }
+
+    public function paginate(Connector $connector): Paginator
+    {
+        return new class(connector: $connector, request: $this) extends OffsetPaginator
+        {
+            protected ?int $perPageLimit = 100;
+
+            protected function isLastPage(Response $response): bool
+            {
+                return $this->getOffset() >= (int) $response->json('data.total_count');
+            }
+
+            protected function getPageItems(Response $response, Request $request): array
+            {
+                // return $response->json('data')['profiles'] ?? [];
+                return $response->json('data.profiles') ?? [];
+            }
+        };
     }
 }

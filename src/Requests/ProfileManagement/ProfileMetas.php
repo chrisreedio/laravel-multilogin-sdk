@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ProfileManagement;
 
+use Illuminate\Support\Arr;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -26,21 +27,23 @@ class ProfileMetas extends Request implements HasBody
      * @param  null|string  $ids  `Required`. Specify the ID of the profile, which metas you would like to fetch.
      */
     public function __construct(
-        protected ?string $ids = null,
+        protected string|array|null $ids = null,
     ) {}
 
     public function defaultBody(): array
     {
-        return array_filter(['ids' => $this->ids]);
+        $ids = Arr::wrap($this->ids);
+
+        return ['ids' => $ids];
     }
 
-    public function defaultQuery(): array
-    {
-        return array_filter(['ids' => $this->ids]);
-    }
+    // public function defaultQuery(): array
+    // {
+    // return array_filter(['ids' => $this->ids]);
+    // }
 
-    public function defaultHeaders(): array
-    {
-        return array_filter([]);
-    }
+    // public function defaultHeaders(): array
+    // {
+    //     return array_filter([]);
+    // }
 }

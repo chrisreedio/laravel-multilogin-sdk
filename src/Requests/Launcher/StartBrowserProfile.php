@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\Launcher;
 
+use ChrisReedIO\MultiloginSDK\Enums\MultiloginDomain;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -14,7 +15,7 @@ class StartBrowserProfile extends Request
 
     public function resolveEndpoint(): string
     {
-        return "/api/v2/profile/f/{$this->folderId}/p/{$this->profileId}/start";
+        return MultiloginDomain::LAUNCHER->getUrl()."/api/v2/profile/f/{$this->folderId}/p/{$this->profileId}/start";
     }
 
     /**

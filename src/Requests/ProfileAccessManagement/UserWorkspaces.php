@@ -4,6 +4,7 @@ namespace ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
 
 /**
  * User Workspaces
@@ -19,8 +20,8 @@ class UserWorkspaces extends Request
 
     public function __construct() {}
 
-    public function defaultHeaders(): array
+    public function createDtoFromResponse(Response $response): array
     {
-        return array_filter([]);
+        return $response->json('data.workspaces');
     }
 }
