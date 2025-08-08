@@ -46,7 +46,7 @@ class ProfileCreate extends Request implements HasBody
             'times' => $this->times,
             'notes' => $this->notes,
             'parameters' => $this->parameters->toArray(),
-        ], fn($value) => $value !== null);
+        ], fn ($value) => $value !== null);
     }
 
     public function defaultHeaders(): array
@@ -55,6 +55,7 @@ class ProfileCreate extends Request implements HasBody
         if ($this->xStrictMode !== null) {
             $headers['X-Strict-Mode'] = $this->xStrictMode ? 'true' : 'false';
         }
+
         return $headers;
     }
 }

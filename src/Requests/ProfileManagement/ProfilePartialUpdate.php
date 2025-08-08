@@ -46,7 +46,7 @@ class ProfilePartialUpdate extends Request implements HasBody
             'custom_start_urls' => $this->customStartUrls,
             'notes' => $this->notes,
             'parameters' => $this->parameters?->toArray(),
-        ], fn($value) => $value !== null);
+        ], fn ($value) => $value !== null);
     }
 
     public function defaultHeaders(): array
