@@ -5,16 +5,16 @@ namespace ChrisReedIO\MultiloginSDK\Requests\Proxy;
 use ChrisReedIO\MultiloginSDK\Enums\MultiloginDomain;
 use ChrisReedIO\MultiloginSDK\Enums\ProxyProtocol;
 use ChrisReedIO\MultiloginSDK\Enums\SessionType;
+use ChrisReedIO\MultiloginSDK\Requests\BaseRequest;
 use Illuminate\Support\Str;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
-use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
 /**
  * Generate Proxy
  */
-class GenerateProxy extends Request implements HasBody
+class GenerateProxy extends BaseRequest implements HasBody
 {
     use HasJsonBody;
 
@@ -61,7 +61,7 @@ class GenerateProxy extends Request implements HasBody
         }
     }
 
-    public function defaultQuery(): array
+    public function defaultBody(): array
     {
         return array_filter([
             'country' => $this->country,
