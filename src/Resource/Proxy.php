@@ -44,7 +44,7 @@ class Proxy extends BaseResource
      * @param  null|string  $ordering  `Optional`. Specify the ordering for the results. Defaults to `name`.
      * @param  null|int  $limit  `Optional`. Specify the number of results to return. Defaults to `100`.
      */
-    public function getRegions(
+    public function regions(
         ?string $country_code = null,
         ?string $ordering = null,
         ?int $limit = null,
@@ -57,7 +57,7 @@ class Proxy extends BaseResource
      * @param  null|string  $ordering  `Optional`. Specify the ordering for the results. Defaults to `name`.
      * @param  null|int  $limit  `Optional`. Specify the number of results to return. Defaults to `1500`.
      */
-    public function getCities(
+    public function cities(
         ?string $region_code = null,
         ?string $ordering = null,
         ?int $limit = null,

@@ -2,15 +2,17 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\Proxy;
 
+use ChrisReedIO\MultiloginSDK\Requests\BaseRequest;
 use Saloon\Enums\Method;
-use Saloon\Http\Request;
 
 /**
  * Get Regions
  */
-class GetRegions extends Request
+class GetRegions extends BaseRequest
 {
     protected Method $method = Method::GET;
+
+    protected ?string $dataSubKey = 'regions';
 
     public function resolveEndpoint(): string
     {
