@@ -41,7 +41,7 @@ class ProfileUpdate extends Request implements HasBody
             'tags' => $this->tags,
             'notes' => $this->notes,
             'parameters' => $this->parameters->toArray(),
-        ], fn($value) => $value !== null);
+        ], fn ($value) => $value !== null);
     }
 
     public function defaultHeaders(): array
