@@ -36,10 +36,9 @@ class Launcher extends BaseResource
         string $profileId,
         ?AutomationType $automationType = null,
         ?string $headlessMode = null,
-        ?string $accept = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new StartBrowserProfile($folderId, $profileId, $automationType, $headlessMode, $accept, $xStrictMode));
+        return $this->connector->send(new StartBrowserProfile($folderId, $profileId, $automationType, $headlessMode, $xStrictMode));
     }
 
     /**
@@ -143,10 +142,9 @@ class Launcher extends BaseResource
         ?string $customStartUrls = null,
         ?string $maxTouchPoints = null,
         ?string $contentType = null,
-        ?string $accept = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new StartQuickProfileV3($browserType, $coreVersion, $coreMinorVersion, $osType, $scriptFile, $automation, $isHeadless, $proxy, $saveTraffic, $parameters, $flags, $webrtcMasking, $geolocationPopup, $audioMaskingGraphicsNoise, $proxyMasking, $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMaskingPortsMasking, $geolocationMasking, $canvasNoise, $startupBehavior, $fingerprint, $hardwareConcurrency, $userAgent, $platform, $osCpu, $acceptLanguages, $languages, $locale, $zone, $vendor, $renderer, $vendorId, $rendererId, $publicIp, $audioOutputs, $videoInputs, $audioInputs, $width, $height, $pixelRatio, $ports, $accuracy, $altitude, $longitude, $latitude, $fonts, $cmdParams, $customStartUrls, $maxTouchPoints, $contentType, $accept, $xStrictMode));
+        return $this->connector->send(new StartQuickProfileV3($browserType, $coreVersion, $coreMinorVersion, $osType, $scriptFile, $automation, $isHeadless, $proxy, $saveTraffic, $parameters, $flags, $webrtcMasking, $geolocationPopup, $audioMaskingGraphicsNoise, $proxyMasking, $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMaskingPortsMasking, $geolocationMasking, $canvasNoise, $startupBehavior, $fingerprint, $hardwareConcurrency, $userAgent, $platform, $osCpu, $acceptLanguages, $languages, $locale, $zone, $vendor, $renderer, $vendorId, $rendererId, $publicIp, $audioOutputs, $videoInputs, $audioInputs, $width, $height, $pixelRatio, $ports, $accuracy, $altitude, $longitude, $latitude, $fonts, $cmdParams, $customStartUrls, $maxTouchPoints, $contentType, $xStrictMode));
     }
 
     /**
@@ -249,47 +247,46 @@ class Launcher extends BaseResource
         ?string $customStartUrls = null,
         ?string $maxTouchPoints = null,
         ?string $contentType = null,
-        ?string $accept = null,
     ): Response {
-        return $this->connector->send(new StartQuickProfile($browserType, $autoUpdateCore, $coreVersion, $osType, $automation, $isHeadless, $proxy, $saveTraffic, $parameters, $flags, $webrtcMasking, $geolocationPopup, $audioMaskingGraphicsNoise, $proxyMasking, $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMaskingPortsMasking, $geolocationMasking, $canvasNoise, $startupBehavior, $fingerprint, $hardwareConcurrency, $userAgent, $platform, $osCpu, $acceptLanguages, $languages, $locale, $zone, $vendor, $renderer, $vendorId, $rendererId, $publicIp, $audioOutputs, $videoInputs, $audioInputs, $width, $height, $pixelRatio, $ports, $accuracy, $altitude, $longitude, $latitude, $fonts, $cmdParams, $customStartUrls, $maxTouchPoints, $contentType, $accept));
+        return $this->connector->send(new StartQuickProfile($browserType, $autoUpdateCore, $coreVersion, $osType, $automation, $isHeadless, $proxy, $saveTraffic, $parameters, $flags, $webrtcMasking, $geolocationPopup, $audioMaskingGraphicsNoise, $proxyMasking, $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMaskingPortsMasking, $geolocationMasking, $canvasNoise, $startupBehavior, $fingerprint, $hardwareConcurrency, $userAgent, $platform, $osCpu, $acceptLanguages, $languages, $locale, $zone, $vendor, $renderer, $vendorId, $rendererId, $publicIp, $audioOutputs, $videoInputs, $audioInputs, $width, $height, $pixelRatio, $ports, $accuracy, $altitude, $longitude, $latitude, $fonts, $cmdParams, $customStartUrls, $maxTouchPoints, $contentType));
     }
 
-    public function stopBrowserProfile(string $profileId, ?string $accept = null): Response
+    public function stopBrowserProfile(string $profileId): Response
     {
-        return $this->connector->send(new StopBrowserProfile($profileId, $accept));
+        return $this->connector->send(new StopBrowserProfile($profileId));
     }
 
     /**
      * @param  string  $type  `Optional`. Specify the type of profile to stop. `all` is set by default.
      */
-    public function stopAllProfiles(?string $type = null, ?string $accept = null): Response
+    public function stopAllProfiles(?string $type = null): Response
     {
-        return $this->connector->send(new StopAllProfiles($type, $accept));
+        return $this->connector->send(new StopAllProfiles($type));
     }
 
-    public function getVersion(?string $accept = null): Response
+    public function getVersion(): Response
     {
-        return $this->connector->send(new GetVersion($accept));
+        return $this->connector->send(new GetVersion);
     }
 
-    public function getProfileStatus(string $profileId, ?string $accept = null): Response
+    public function getProfileStatus(string $profileId): Response
     {
-        return $this->connector->send(new GetProfileStatus($profileId, $accept));
+        return $this->connector->send(new GetProfileStatus($profileId));
     }
 
-    public function getAllProfilesStatus(?string $accept = null): Response
+    public function getAllProfilesStatus(): Response
     {
-        return $this->connector->send(new GetAllProfilesStatus($accept));
+        return $this->connector->send(new GetAllProfilesStatus);
     }
 
-    public function getAllQuickProfilesStatus(?string $accept = null): Response
+    public function getAllQuickProfilesStatus(): Response
     {
-        return $this->connector->send(new GetAllQuickProfilesStatus($accept));
+        return $this->connector->send(new GetAllQuickProfilesStatus);
     }
 
-    public function loadedBrowserCores(?string $accept = null): Response
+    public function loadedBrowserCores(): Response
     {
-        return $this->connector->send(new LoadedBrowserCores($accept));
+        return $this->connector->send(new LoadedBrowserCores);
     }
 
     /**
@@ -299,10 +296,9 @@ class Launcher extends BaseResource
      */
     public function browserCoreList(
         ?string $browserType = null,
-        ?string $accept = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new BrowserCoreList($browserType, $browserType, $accept, $xStrictMode));
+        return $this->connector->send(new BrowserCoreList($browserType, $browserType, $xStrictMode));
     }
 
     /**
@@ -313,10 +309,9 @@ class Launcher extends BaseResource
     public function loadBrowserCore(
         ?string $browserType = null,
         ?string $version = null,
-        ?string $accept = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new LoadBrowserCore($browserType, $version, $accept, $xStrictMode));
+        return $this->connector->send(new LoadBrowserCore($browserType, $version, $xStrictMode));
     }
 
     /**
@@ -327,10 +322,9 @@ class Launcher extends BaseResource
     public function deleteBrowserCore(
         ?string $browserType = null,
         ?string $version = null,
-        ?string $accept = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new DeleteBrowserCore($browserType, $version, $accept, $xStrictMode));
+        return $this->connector->send(new DeleteBrowserCore($browserType, $version, $xStrictMode));
     }
 
     /**
@@ -347,11 +341,10 @@ class Launcher extends BaseResource
         ?string $port = null,
         ?string $username = null,
         ?string $password = null,
-        ?string $accept = null,
         ?string $contentType = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new ValidateProxy($type, $host, $port, $username, $password, $accept, $contentType, $xStrictMode));
+        return $this->connector->send(new ValidateProxy($type, $host, $port, $username, $password, $contentType, $xStrictMode));
     }
 
     /**

@@ -21,6 +21,7 @@
         "saloonphp/cache-plugin": "^3.0",
         "saloonphp/pagination-plugin": "^2.0",
         "saloonphp/saloon": "^3.0",
+        "spatie/laravel-data": "^4.17",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {

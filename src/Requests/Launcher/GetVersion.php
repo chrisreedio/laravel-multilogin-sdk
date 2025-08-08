@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\Launcher;
 
+use ChrisReedIO\MultiloginSDK\Enums\MultiloginDomain;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -14,7 +15,7 @@ class GetVersion extends Request
 
     public function resolveEndpoint(): string
     {
-        return '/api/v1/version';
+        return MultiloginDomain::LAUNCHER->getUrl().'/api/v1/version';
     }
 
     public function __construct() {}

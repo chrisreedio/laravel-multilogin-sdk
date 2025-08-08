@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\Launcher;
 
+use ChrisReedIO\MultiloginSDK\Enums\MultiloginDomain;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -14,7 +15,7 @@ class GetAllProfilesStatus extends Request
 
     public function resolveEndpoint(): string
     {
-        return '/api/v1/profile/statuses';
+        return MultiloginDomain::LAUNCHER->getUrl().'/api/v1/profile/statuses';
     }
 
     public function __construct() {}

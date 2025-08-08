@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ProfileManagement;
 
+use ChrisReedIO\MultiloginSDK\Data\ProxyData;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -82,7 +83,7 @@ class ProfilePartialUpdate extends Request implements HasBody
         protected ?string $coreMinorVersion = null,
         protected ?string $coreVersion = null,
         protected ?string $tags = null,
-        protected ?string $proxy = null,
+        protected ?ProxyData $proxy = null,
         protected ?string $saveTraffic = null,
         protected ?string $customStartUrls = null,
         protected ?string $notes = null,
@@ -129,7 +130,7 @@ class ProfilePartialUpdate extends Request implements HasBody
         protected ?string $maxTouchPoints = null,
     ) {}
 
-    public function defaultQuery(): array
+    public function defaultBody(): array
     {
         return array_filter([
             'profile_id' => $this->profileId,
@@ -138,7 +139,7 @@ class ProfilePartialUpdate extends Request implements HasBody
             'core_minor_version' => $this->coreMinorVersion,
             'core_version' => $this->coreVersion,
             'tags' => $this->tags,
-            'proxy' => $this->proxy,
+            'proxy' => $this->proxy?->toArray(),
             'save_traffic' => $this->saveTraffic,
             'custom_start_urls' => $this->customStartUrls,
             'notes' => $this->notes,
