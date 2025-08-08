@@ -33,7 +33,7 @@ class Proxy extends BaseResource
         ?ProxyProtocol $protocol = ProxyProtocol::HTTP,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new GenerateProxy($country, $protocol, $sessionType, $region, $city, $ipttl, $count, $xStrictMode));
+        return $this->connector->send(new GenerateProxy($country, $region, $city, $sessionType, $ipttl, $count, $protocol, $xStrictMode));
     }
 
     public function fetchProxyData(?string $contentType = null, ?string $accept = null): Response
