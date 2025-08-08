@@ -29,10 +29,10 @@ class ProfileManagement extends BaseResource
      * Create new browser profiles with specified parameters.
      *
      * @param  string  $name  Profile name
-     * @param  BrowserType  $browserType  Browser type (mimic, stealthfox, etc.)
      * @param  string  $folderId  Folder ID where profiles will be created
      * @param  ProfileCreateParameters  $parameters  Profile configuration including flags, fingerprint, storage, proxy
      * @param  OsType  $osType  Operating system type (defaults to Windows)
+     * @param  BrowserType  $browserType  Browser type (mimic, stealthfox, etc.) (defaults to mimic)
      * @param  int|null  $coreVersion  Browser core version (optional)
      * @param  int|null  $coreMinorVersion  Browser core minor version (optional)
      * @param  int|null  $times  Number of profiles to create (defaults to 1)
@@ -41,10 +41,10 @@ class ProfileManagement extends BaseResource
      */
     public function create(
         string $name,
-        BrowserType $browserType,
         string $folderId,
         ProfileCreateParameters $parameters,
         OsType $osType = OsType::WINDOWS,
+        BrowserType $browserType = BrowserType::MIMIC,
         ?int $coreVersion = null,
         ?int $coreMinorVersion = null,
         ?int $times = null,
@@ -53,10 +53,10 @@ class ProfileManagement extends BaseResource
     ): Response {
         return $this->connector->send(new ProfileCreate(
             $name,
-            $browserType,
             $folderId,
             $parameters,
             $osType,
+            $browserType,
             $coreVersion,
             $coreMinorVersion,
             $times,

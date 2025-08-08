@@ -5,16 +5,18 @@ namespace ChrisReedIO\MultiloginSDK\Requests\ProfileManagement;
 use ChrisReedIO\MultiloginSDK\Data\ProfileCreateParameters;
 use ChrisReedIO\MultiloginSDK\Enums\BrowserType;
 use ChrisReedIO\MultiloginSDK\Enums\OsType;
+use ChrisReedIO\MultiloginSDK\Requests\BaseRequest;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
-use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
-class ProfileCreate extends Request implements HasBody
+class ProfileCreate extends BaseRequest implements HasBody
 {
     use HasJsonBody;
 
     protected Method $method = Method::POST;
+
+    protected ?string $dataSubKey = 'ids';
 
     public function resolveEndpoint(): string
     {
@@ -23,10 +25,10 @@ class ProfileCreate extends Request implements HasBody
 
     public function __construct(
         protected string $name,
-        protected BrowserType $browserType,
         protected string $folderId,
         protected ProfileCreateParameters $parameters,
         protected OsType $osType = OsType::WINDOWS,
+        protected BrowserType $browserType = BrowserType::MIMIC,
         protected ?int $coreVersion = null,
         protected ?int $coreMinorVersion = null,
         protected ?int $times = null,
@@ -46,7 +48,7 @@ class ProfileCreate extends Request implements HasBody
             'times' => $this->times,
             'notes' => $this->notes,
             'parameters' => $this->parameters->toArray(),
-        ], fn($value) => $value !== null);
+        ], fn ($value) => $value !== null);
     }
 
     public function defaultHeaders(): array
@@ -55,6 +57,7 @@ class ProfileCreate extends Request implements HasBody
         if ($this->xStrictMode !== null) {
             $headers['X-Strict-Mode'] = $this->xStrictMode ? 'true' : 'false';
         }
+
         return $headers;
     }
 }
