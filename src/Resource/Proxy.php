@@ -23,7 +23,7 @@ class Proxy extends BaseResource
      * @param  ProxyProtocol|null  $protocol  `Optional`. Specify the desired protocol for the proxy IP. Defaults to `http`.
      * @param  string|null  $xStrictMode  `Optional`. Default to false. If set to true, you must specify values for all required parameters.
      */
-    public function generateProxy(
+    public function generate(
         ?string $country = null,
         ?string $region = null,
         ?string $city = null,

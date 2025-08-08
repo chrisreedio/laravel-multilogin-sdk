@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Resource;
 
+use ChrisReedIO\MultiloginSDK\Data\ProxyData;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileManagement\ProfileClone;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileManagement\ProfileConvert;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileManagement\ProfileCreate;
@@ -345,7 +346,7 @@ class ProfileManagement extends BaseResource
      * @param  string  $coreMinorVersion  `Optional`. Specify the minor version based on its availability.
      * @param  string  $coreVersion  `Optional`. Cannot specify the version that is 6 versions older then the current latest one.
      * @param  string  $tags  `Optional`. Specify tags. Max number is 10.
-     * @param  string  $proxy  `Optional` for `fingerprint`. Add a proxy to your profiles.
+     * @param  ?ProxyData  $proxy  `Optional` for `fingerprint`. Add a proxy to your profiles.
      * @param  string  $saveTraffic  `Optional` for `proxy`. `false` is set by default. When set to `true`,  disables the loading of images/videos saving the proxy traffic.
      * @param  string  $customStartUrls  `Optional` for `fingerprint`. Specify custom URLs. Max amount is 5.
      * @param  string  $notes  `Optional`. Add notes to your profiles.
@@ -398,7 +399,7 @@ class ProfileManagement extends BaseResource
         ?string $coreMinorVersion = null,
         ?string $coreVersion = null,
         ?string $tags = null,
-        ?string $proxy = null,
+        ?ProxyData $proxy = null,
         ?string $saveTraffic = null,
         ?string $customStartUrls = null,
         ?string $notes = null,
