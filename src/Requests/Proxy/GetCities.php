@@ -3,6 +3,7 @@
 namespace ChrisReedIO\MultiloginSDK\Requests\Proxy;
 
 use ChrisReedIO\MultiloginSDK\Requests\BaseRequest;
+use Illuminate\Support\Str;
 use Saloon\Enums\Method;
 
 /**
@@ -28,7 +29,12 @@ class GetCities extends BaseRequest
         protected ?string $region_code = null,
         protected ?string $ordering = null,
         protected ?int $limit = null,
-    ) {}
+    ) {
+        // If region code is provided, convert it to snake case
+        if ($this->region_code) {
+            $this->region_code = Str::snake($this->region_code);
+        }
+    }
 
     public function defaultQuery(): array
     {

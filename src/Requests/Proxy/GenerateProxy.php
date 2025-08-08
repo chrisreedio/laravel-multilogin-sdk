@@ -2,6 +2,8 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\Proxy;
 
+use ChrisReedIO\MultiloginSDK\Enums\MultiloginDomain;
+use Illuminate\Support\Str;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -18,7 +20,7 @@ class GenerateProxy extends Request implements HasBody
 
     public function resolveEndpoint(): string
     {
-        return '/v1/proxy/connection_url';
+        return MultiloginDomain::PROFILE_PROXY->getUrl().'/v1/proxy/connection_url';
     }
 
     /**
@@ -40,7 +42,22 @@ class GenerateProxy extends Request implements HasBody
         protected ?string $ipttl = null,
         protected ?string $count = null,
         protected ?string $xStrictMode = null,
-    ) {}
+    ) {
+        // If country is provided, convert it to snake case
+        if ($this->country) {
+            $this->country = Str::snake($this->country);
+        }
+
+        // If region is provided, convert it to snake case
+        if ($this->region) {
+            $this->region = Str::snake($this->region);
+        }
+
+        // If city is provided, convert it to snake case
+        if ($this->city) {
+            $this->city = Str::snake($this->city);
+        }
+    }
 
     public function defaultQuery(): array
     {

@@ -3,6 +3,7 @@
 namespace ChrisReedIO\MultiloginSDK\Requests\Proxy;
 
 use ChrisReedIO\MultiloginSDK\Requests\BaseRequest;
+use Illuminate\Support\Str;
 use Saloon\Enums\Method;
 
 /**
@@ -28,7 +29,16 @@ class GetRegions extends BaseRequest
         protected ?string $country_code = null,
         protected ?string $ordering = null,
         protected ?int $limit = null,
-    ) {}
+    ) {
+        // If country code is provided, convert it to snake case
+        if ($this->country_code) {
+            $this->country_code = Str::snake($this->country_code);
+            // If it's not 2 characters, throw an error
+            if (strlen($this->country_code) !== 2) {
+                throw new \Exception('Country code must be 2 characters');
+            }
+        }
+    }
 
     public function defaultQuery(): array
     {
