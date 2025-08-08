@@ -2,7 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Enums;
 
-enum ProxyType: string
+enum ProxyProtocol: string
 {
     case HTTP = 'http';
     case HTTPS = 'https';

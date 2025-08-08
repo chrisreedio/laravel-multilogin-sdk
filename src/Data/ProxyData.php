@@ -2,7 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Data;
 
-use ChrisReedIO\MultiloginSDK\Enums\ProxyType;
+use ChrisReedIO\MultiloginSDK\Enums\ProxyProtocol;
 use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\Data;
 
@@ -15,6 +15,7 @@ class ProxyData extends Data
         public string $password,
         #[MapName('save_traffic')]
         public bool $saveTraffic = true,
-        public ProxyType $type = ProxyType::HTTP,
+        #[MapName('type')]
+        public ProxyProtocol $protocol = ProxyProtocol::HTTP,
     ) {}
 }
