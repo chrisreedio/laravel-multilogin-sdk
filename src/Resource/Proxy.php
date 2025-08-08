@@ -4,6 +4,8 @@ namespace ChrisReedIO\MultiloginSDK\Resource;
 
 use ChrisReedIO\MultiloginSDK\Requests\Proxy\FetchProxyData;
 use ChrisReedIO\MultiloginSDK\Requests\Proxy\GenerateProxy;
+use ChrisReedIO\MultiloginSDK\Requests\Proxy\GetCities;
+use ChrisReedIO\MultiloginSDK\Requests\Proxy\GetRegions;
 use Saloon\Http\BaseResource;
 use Saloon\Http\Response;
 
@@ -35,5 +37,31 @@ class Proxy extends BaseResource
     public function fetchProxyData(?string $contentType = null, ?string $accept = null): Response
     {
         return $this->connector->send(new FetchProxyData($contentType, $accept));
+    }
+
+    /**
+     * @param  null|string  $country_code  `Optional`. Filter regions by country code. Use ISO 3166-1 alpha-2 country codes.
+     * @param  null|string  $ordering  `Optional`. Specify the ordering for the results. Defaults to `name`.
+     * @param  null|int  $limit  `Optional`. Specify the number of results to return. Defaults to `100`.
+     */
+    public function getRegions(
+        ?string $country_code = null,
+        ?string $ordering = null,
+        ?int $limit = null,
+    ): Response {
+        return $this->connector->send(new GetRegions($country_code, $ordering, $limit));
+    }
+
+    /**
+     * @param  null|string  $region_code  `Optional`. Filter cities by region code. Use snake_case for specifying the region.
+     * @param  null|string  $ordering  `Optional`. Specify the ordering for the results. Defaults to `name`.
+     * @param  null|int  $limit  `Optional`. Specify the number of results to return. Defaults to `1500`.
+     */
+    public function getCities(
+        ?string $region_code = null,
+        ?string $ordering = null,
+        ?int $limit = null,
+    ): Response {
+        return $this->connector->send(new GetCities($region_code, $ordering, $limit));
     }
 }
