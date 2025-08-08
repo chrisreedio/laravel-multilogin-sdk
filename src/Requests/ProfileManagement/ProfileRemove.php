@@ -22,19 +22,24 @@ class ProfileRemove extends Request implements HasBody
     }
 
     /**
-     * @param  null|string  $ids  `Required`. Specify the ID of the profile to be deleted.
-     * @param  null|string  $permanently  `Required`. Specify the value to delete profiles perminantly or not. Defaults to `false`.
-     * @param  null|string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     * @param  string|array  $ids  `Required`. Specify the ID of the profile to be deleted.
+     * @param  bool  $permanently  `Required`. Specify the value to delete profiles perminantly or not. Defaults to `false`.
+     * @param  bool  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function __construct(
-        protected ?string $ids = null,
-        protected ?string $permanently = null,
-        protected ?string $xStrictMode = null,
+        protected string|array $ids,
+        protected bool $permanently = false,
+        protected bool $xStrictMode = false,
     ) {}
 
-    public function defaultQuery(): array
+    public function defaultBody(): array
     {
-        return array_filter(['ids' => $this->ids, 'permanently' => $this->permanently]);
+        $ids = is_array($this->ids) ? $this->ids : [$this->ids];
+
+        return array_filter([
+            'ids' => $ids,
+            'permanently' => $this->permanently,
+        ]);
     }
 
     public function defaultHeaders(): array

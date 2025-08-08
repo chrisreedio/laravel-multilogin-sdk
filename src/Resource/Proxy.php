@@ -36,9 +36,9 @@ class Proxy extends BaseResource
         return $this->connector->send(new GenerateProxy($country, $region, $city, $sessionType, $ipttl, $count, $protocol, $xStrictMode));
     }
 
-    public function fetchProxyData(?string $contentType = null, ?string $accept = null): Response
+    public function trafficUsage(): Response
     {
-        return $this->connector->send(new FetchProxyData($contentType, $accept));
+        return $this->connector->send(new FetchProxyData);
     }
 
     /**

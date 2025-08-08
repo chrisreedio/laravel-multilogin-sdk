@@ -4,6 +4,7 @@ namespace ChrisReedIO\MultiloginSDK\Requests\Proxy;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
 
 /**
  * Fetch Proxy Data
@@ -17,10 +18,8 @@ class FetchProxyData extends Request
         return '/v1/user';
     }
 
-    public function __construct() {}
-
-    public function defaultHeaders(): array
+    public function createDtoFromResponse(Response $response): int
     {
-        return array_filter([]);
+        return $response->json('traffic');
     }
 }

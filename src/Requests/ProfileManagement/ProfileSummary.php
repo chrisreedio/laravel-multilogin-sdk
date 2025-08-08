@@ -18,19 +18,16 @@ class ProfileSummary extends Request
     }
 
     /**
-     * @param  null|string  $metaId  `Required`. Specify the profile id.
+     * @param  string  $metaId  `Required`. Specify the profile id.
      */
     public function __construct(
-        protected ?string $metaId = null,
+        protected string $metaId,
     ) {}
 
-    public function defaultQuery(): array
+    public function defaultBody(): array
     {
-        return array_filter(['meta_id' => $this->metaId]);
-    }
-
-    public function defaultHeaders(): array
-    {
-        return array_filter([]);
+        return array_filter([
+            'meta_id' => $this->metaId,
+        ]);
     }
 }

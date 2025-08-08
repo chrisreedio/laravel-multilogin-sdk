@@ -3,6 +3,7 @@
 namespace ChrisReedIO\MultiloginSDK\Resource;
 
 use ChrisReedIO\MultiloginSDK\Data\ProfileCreateParameters;
+use ChrisReedIO\MultiloginSDK\Data\ProfilePartialUpdateParameters;
 use ChrisReedIO\MultiloginSDK\Data\ProxyData;
 use ChrisReedIO\MultiloginSDK\Enums\BrowserType;
 use ChrisReedIO\MultiloginSDK\Enums\OsType;
@@ -117,266 +118,107 @@ class ProfileManagement extends BaseResource
     }
 
     /**
-     * @param  string  $ids  `Required`. Specify the ID of the profile to be deleted.
-     * @param  string  $permanently  `Required`. Specify the value to delete profiles perminantly or not. Defaults to `false`.
-     * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     * @param  string|array  $ids  `Required`. Specify the ID of the profile to be deleted.
+     * @param  bool  $permanently  `Required`. Specify the value to delete profiles perminantly or not. Defaults to `false`.
+     * @param  bool  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function remove(
-        ?string $ids = null,
-        ?string $permanently = null,
-        ?string $contentType = null,
-        ?string $accept = null,
-        ?string $xStrictMode = null,
+        string|array $ids,
+        bool $permanently = false,
+        bool $xStrictMode = false,
     ): Response {
-        return $this->connector->send(new ProfileRemove($ids, $permanently, $contentType, $accept, $xStrictMode));
+        return $this->connector->send(new ProfileRemove($ids, $permanently, $xStrictMode));
     }
 
     /**
-     * @param  string  $autoUpdateCore  `Optional`. Setting to True allows passing "core_version" and "core_minor_version".
-     * @param  string  $coreVersion  `Optional`. Cannot specify the version that is 6 versions older then the current latest one.
-     * @param  string  $coreMinorVersion  `Optional`. Specify the minor version based on its availability.
-     * @param  string  $profileId  `Required`. Specify the ID of the profile to be updated.
-     * @param  string  $name  `Required`. Name your profiles.
-     * @param  string  $tags  `Optional`. Specify tags. Max number is 10.
-     * @param  string  $parameters  `Required`. Specify parameters for your profiles. `flags`, `fingerprint`, `storage` **are required** for **parameters**.
-     * @param  string  $flags  `Required`. Specify flags for your profiles. `webrtc_masking, proxy_masking, geolocation_popup, audio_masking, graphics_noise, ports_masking, navigator_masking, localization_masking, timezone_masking, graphics_masking, fonts_masking, media_devices_masking, screen_masking, geolocation_masking` **are required** for **parameters**.
-     * @param  string  $webrtcMasking  `Required` for `flags`.
-     * @param  string  $audioMaskingGraphicsNoisePortsMasking  `Required` for `flags`.
-     * @param  string  $proxyMasking  `Required` for `flags`.
-     * @param  string  $geolocationPopup  `Required` for `flags`.
-     * @param  string  $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMasking  `Required` for `flags`.
-     * @param  string  $geolocationMasking  `Required` for `flags`.
-     * @param  string  $autoUpdateCore  `Optional`. You can skip specifying the value since your profiles will be updated to the latest core by default each time it is launched.
-     * @param  string  $quicMode  `Optional` for `flags`. `disabled` by default.
-     * @param  string  $canvasNoise  `Optional` for `flags`. The value is set based on the value of `graphics_noise` by default. To set a specific value for `canvas_noise`, include `canvas_noise` in your request body.
-     * @param  string  $startupBehavior  `Optional` for `flags`. `recover` is set by default and allows opening profiles with the tabs from the last session. `custom` opens up profiles with provided custom pages in `custom_start_urls`.
-     * @param  string  $fingerprint  `Required` for `parameters`. Specify fingerprints of your profiles if flags are set to `Custom`.
-     * @param  string  $hardwareConcurrency  `Required` for `navigator`. Specify the value for `hardware_concurrency` if the flag is `Custom`.
-     * @param  string  $userAgent  `Required` for `navigator`. Specify the value for `user-agent`.
-     * @param  string  $platform  `Required` for `navigator`. Specify the value for `platform` if the flag is `Custom`.
-     * @param  string  $osCpu  `Optional` for `navigator`. Specify the value for `os_cpu`if the flag is `Custom`.
-     * @param  string  $acceptLanguages  `Required` for `localization`. Specify the value for `accept_languages` if the flag is `Custom`.
-     * @param  string  $languages  `Required` for `localization`.
-     * @param  string  $locale  `Required` for `localization`. Pass an empty string.
-     * @param  string  $zone  `Required` for `timezone` Specify the value for `zone`.
-     * @param  string  $vendor  `Required` for `graphic`. Specify the value for `vendor` if the flag is `Custom`.
-     * @param  string  $renderer  `Required` for `graphic`. Specify the value for `renderer` if the flag is `Custom`.
-     * @param  string  $vendorId  `Optional` for `graphic`. Specify the value for `vendor_id` if the flag is `Custom`.
-     * @param  string  $rendererId  `Optional` for `graphic`. Specify the value for `renderer_id` if the flag is `Custom`.
-     * @param  string  $publicIp  `Required` for `webrtc`. Specify the value for `public_ip` if the flag is `Custom`.
-     * @param  string  $audioOutputs  `Required` for `media_devices`. Specify the value for `audio_outputs` if the flag is `Custom`.
-     * @param  string  $audioInputs  `Required` for `media_devices`. Specify the value for `audio_inputs` if the flag is `Custom`.
-     * @param  string  $videoInputs  `Required` for `media_devices`. Specify the value for `video_inputs` if the flag is `Custom`.
-     * @param  string  $width  `Required` for `screen`. Specify the value for `width` if the flag is `Custom`.
-     * @param  string  $height  `Required` for `screen`. Specify the value for `height` if the flag is `Custom`.
-     * @param  string  $pixelRatio  `Required` for `screen`. Specify the value for `pixel_ratio` if the flag is `Custom`.
-     * @param  string  $accuracy  `Required` for `geolocation`. Specify the value for `accuracy` if the flag is `Custom`.
-     * @param  string  $altitude  `Required` for `geolocation`. Specify the value for `altitude` if the flag is `Custom`.
-     * @param  string  $latitude  `Required` for `geolocation`. Specify the value for `latitude` if the flag is `Custom`.
-     * @param  string  $longitude  `Required` for `geolocation`. Specify the value for `longitude` if the flag is `Custom`.
-     * @param  string  $ports  `Optional` for `fingerprint`. Specify the value for `ports` if the flag is `Custom`.
-     * @param  string  $fonts  `Optional` for `fingerprint`. Specify the value for `fonts` if the flag is `Custom`.
-     * @param  string  $cmdParams  `Optional` for `fingerprint`. Specify command line parameters for browsers.
-     * @param  string  $isLocal  `Required` for `storage`.
-     * @param  string  $saveServiceWorker  `Optional` for `storage`.
-     * @param  string  $proxy  `Optional` for `fingerprint`. Add a proxy to your profiles.
-     * @param  string  $saveTraffic  `Optional` for `proxy`. `false` is set by default. When set to `true`,  disables the loading of images/videos saving the proxy traffic.
-     * @param  string  $customStartUrls  `Optional` for `fingerprint`. Specify custom URLs. Max amount is 5.
-     * @param  string  $notes  `Optional`. Add notes to your profiles.
-     * @param  string  $maxTouchPoints  `Optional` for `fingerprint` with `android` os. Default is 5.
+     * Completely update a browser profile with new configuration.
+     *
+     * @param  string  $profileId  Profile ID to update
+     * @param  string  $name  New profile name
+     * @param  ProfileCreateParameters  $parameters  Complete profile configuration
+     * @param  bool|null  $autoUpdateCore  Enable automatic core updates (optional)
+     * @param  int|null  $coreVersion  Browser core version (optional)
+     * @param  int|null  $coreMinorVersion  Browser core minor version (optional)
+     * @param  string|null  $tags  Profile tags (optional)
+     * @param  string|null  $notes  Profile notes (optional)
      */
     public function update(
-        ?string $autoUpdateCore = null,
-        ?string $coreVersion = null,
-        ?string $coreMinorVersion = null,
-        ?string $profileId = null,
-        ?string $name = null,
+        string $profileId,
+        string $name,
+        ProfileCreateParameters $parameters,
+        ?bool $autoUpdateCore = null,
+        ?int $coreVersion = null,
+        ?int $coreMinorVersion = null,
         ?string $tags = null,
-        ?string $parameters = null,
-        ?string $flags = null,
-        ?string $webrtcMasking = null,
-        ?string $audioMaskingGraphicsNoisePortsMasking = null,
-        ?string $proxyMasking = null,
-        ?string $geolocationPopup = null,
-        ?string $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMasking = null,
-        ?string $geolocationMasking = null,
-        ?string $quicMode = null,
-        ?string $canvasNoise = null,
-        ?string $startupBehavior = null,
-        ?string $fingerprint = null,
-        ?string $hardwareConcurrency = null,
-        ?string $userAgent = null,
-        ?string $platform = null,
-        ?string $osCpu = null,
-        ?string $acceptLanguages = null,
-        ?string $languages = null,
-        ?string $locale = null,
-        ?string $zone = null,
-        ?string $vendor = null,
-        ?string $renderer = null,
-        ?string $vendorId = null,
-        ?string $rendererId = null,
-        ?string $publicIp = null,
-        ?string $audioOutputs = null,
-        ?string $audioInputs = null,
-        ?string $videoInputs = null,
-        ?string $width = null,
-        ?string $height = null,
-        ?string $pixelRatio = null,
-        ?string $accuracy = null,
-        ?string $altitude = null,
-        ?string $latitude = null,
-        ?string $longitude = null,
-        ?string $ports = null,
-        ?string $fonts = null,
-        ?string $cmdParams = null,
-        ?string $isLocal = null,
-        ?string $saveServiceWorker = null,
-        ?string $proxy = null,
-        ?string $saveTraffic = null,
-        ?string $customStartUrls = null,
         ?string $notes = null,
-        ?string $maxTouchPoints = null,
-        ?string $contentType = null,
-        ?string $accept = null,
     ): Response {
-        return $this->connector->send(new ProfileUpdate($autoUpdateCore, $coreVersion, $coreMinorVersion, $profileId, $name, $tags, $parameters, $flags, $webrtcMasking, $audioMaskingGraphicsNoisePortsMasking, $proxyMasking, $geolocationPopup, $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMasking, $geolocationMasking, $autoUpdateCore, $quicMode, $canvasNoise, $startupBehavior, $fingerprint, $hardwareConcurrency, $userAgent, $platform, $osCpu, $acceptLanguages, $languages, $locale, $zone, $vendor, $renderer, $vendorId, $rendererId, $publicIp, $audioOutputs, $audioInputs, $videoInputs, $width, $height, $pixelRatio, $accuracy, $altitude, $latitude, $longitude, $ports, $fonts, $cmdParams, $isLocal, $saveServiceWorker, $proxy, $saveTraffic, $customStartUrls, $notes, $maxTouchPoints, $contentType, $accept));
+        return $this->connector->send(new ProfileUpdate(
+            $profileId,
+            $name,
+            $parameters,
+            $autoUpdateCore,
+            $coreVersion,
+            $coreMinorVersion,
+            $tags,
+            $notes
+        ));
     }
 
     /**
-     * @param  mixed  $destFolderId
-     * @param  mixed  $ids
      * @param  string  $destFolderId  `Required`. Specify the folder, to which profiles will be moved.
-     * @param  string  $ids  `Required`. Provide a list of profiles to be moved. Max number of IDs is 20.
+     * @param  string|array  $ids  `Required`. Provide a list of profiles to be moved. Max number of IDs is 20.
      */
-    public function move(
-        ?string $destFolderId = null,
-        ?string $ids = null,
-        ?string $contentType = null,
-        ?string $accept = null,
-    ): Response {
-        return $this->connector->send(new ProfileMove($destFolderId, $ids, $destFolderId, $ids, $contentType, $accept));
+    public function move(string $destFolderId, string|array $ids): Response
+    {
+        return $this->connector->send(new ProfileMove($destFolderId, $ids));
     }
 
     /**
-     * @param  string  $profileId  `Required`. Specify the ID of the profile to be updated.
-     * @param  string  $name  `Optional`. Name your profiles.
-     * @param  string  $autoUpdateCore  `Optional`.
-     *                                  You can skip specifying the value since your profiles will be updated to the latest core by default each time it is launched.
-     * @param  string  $coreMinorVersion  `Optional`. Specify the minor version based on its availability.
-     * @param  string  $coreVersion  `Optional`. Cannot specify the version that is 6 versions older then the current latest one.
-     * @param  string  $tags  `Optional`. Specify tags. Max number is 10.
-     * @param  ?ProxyData  $proxy  `Optional` for `fingerprint`. Add a proxy to your profiles.
-     * @param  string  $saveTraffic  `Optional` for `proxy`. `false` is set by default. When set to `true`,  disables the loading of images/videos saving the proxy traffic.
-     * @param  string  $customStartUrls  `Optional` for `fingerprint`. Specify custom URLs. Max amount is 5.
-     * @param  string  $notes  `Optional`. Add notes to your profiles.
-     * @param  string  $parameters  `Optional`.
-     * @param  string  $flags  `Optional`.
-     * @param  string  $webrtcMasking  `Optional`.
-     * @param  string  $audioMaskingGraphicsNoisePortsMasking  `Optional`.
-     * @param  string  $proxyMasking  `Optional`.
-     * @param  string  $geolocationPopup  `Optional`.
-     * @param  string  $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMasking  `Optional`.
-     * @param  string  $geolocationMasking  `Optional`.
-     * @param  string  $quicMode  `Optional` for `flags`. `disabled` by default.
-     * @param  string  $canvasNoise  `Optional` for `flags`. The value is set based on the value of `graphics_noise` by default. To set a specific value for `canvas_noise`, include `canvas_noise` in your request body.
-     * @param  string  $startupBehavior  `Optional` for `flags`. `recover` is set by default and allows opening profiles with the tabs from the last session. `custom` opens up profiles with provided custom pages in `custom_start_urls`.
-     * @param  string  $isLocal  `Required` for `storage`.
-     * @param  string  $saveServiceWorker  `Optional` for `storage`.
-     * @param  string  $fingerprint  `Required` for `parameters`. Specify fingerprints of your profiles if flags are set to `Custom`.
-     * @param  string  $hardwareConcurrency  `Required` for `navigator`. Specify the value for `hardware_concurrency` if the flag is `Custom`.
-     * @param  string  $userAgent  `Required` for `navigator`. Specify the value for `user-agent`.
-     * @param  string  $platform  `Required` for `navigator`. Specify the value for `platform` if the flag is `Custom`.
-     * @param  string  $osCpu  `Optional` for `navigator`. Specify the value for `os_cpu`if the flag is `Custom`.
-     * @param  string  $acceptLanguages  `Required` for `localization`. Specify the value for `accept_languages` if the flag is `Custom`.
-     * @param  string  $languages  `Required` for `localization`.
-     * @param  string  $locale  `Required` for `localization`. Pass an empty string.
-     * @param  string  $zone  `Required` for `timezone` Specify the value for `zone`.
-     * @param  string  $vendor  `Required` for `graphic`. Specify the value for `vendor` if the flag is `Custom`.
-     * @param  string  $renderer  `Required` for `graphic`. Specify the value for `renderer` if the flag is `Custom`.
-     * @param  string  $vendorId  `Optional` for `graphic`. Specify the value for `vendor_id` if the flag is `Custom`.
-     * @param  string  $rendererId  `Optional` for `graphic`. Specify the value for `renderer_id` if the flag is `Custom`.
-     * @param  string  $publicIp  `Required` for `webrtc`. Specify the value for `public_ip` if the flag is `Custom`.
-     * @param  string  $audioOutputs  `Required` for `media_devices`. Specify the value for `audio_outputs` if the flag is `Custom`.
-     * @param  string  $audioInputs  `Required` for `media_devices`. Specify the value for `audio_inputs` if the flag is `Custom`.
-     * @param  string  $videoInputs  `Required` for `media_devices`. Specify the value for `video_inputs` if the flag is `Custom`.
-     * @param  string  $width  `Required` for `screen`. Specify the value for `width` if the flag is `Custom`.
-     * @param  string  $height  `Required` for `screen`. Specify the value for `height` if the flag is `Custom`.
-     * @param  string  $pixelRatio  `Required` for `screen`. Specify the value for `pixel_ratio` if the flag is `Custom`.
-     * @param  string  $accuracy  `Required` for `geolocation`. Specify the value for `accuracy` if the flag is `Custom`.
-     * @param  string  $altitude  `Required` for `geolocation`. Specify the value for `altitude` if the flag is `Custom`.
-     * @param  string  $latitude  `Required` for `geolocation`. Specify the value for `latitude` if the flag is `Custom`.
-     * @param  string  $longitude  `Required` for `geolocation`. Specify the value for `longitude` if the flag is `Custom`.
-     * @param  string  $ports  `Optional` for `fingerprint`. Specify the value for `ports` if the flag is `Custom`.
-     * @param  string  $fonts  `Optional` for `fingerprint`. Specify the value for `fonts` if the flag is `Custom`.
-     * @param  string  $cmdParams  `Optional` for `fingerprint`. Specify command line parameters for browsers.
-     * @param  string  $maxTouchPoints  `Optional` for `fingerprint` with `android` os. Default is 5.
+     * Partially update a browser profile with specified changes.
+     *
+     * @param  string  $profileId  Profile ID to update
+     * @param  string|null  $name  New profile name (optional)
+     * @param  bool|null  $autoUpdateCore  Enable automatic core updates (optional)
+     * @param  int|null  $coreVersion  Browser core version (optional)
+     * @param  int|null  $coreMinorVersion  Browser core minor version (optional)
+     * @param  string|null  $tags  Profile tags (optional)
+     * @param  ProxyData|null  $proxy  Proxy configuration (optional)
+     * @param  array|null  $customStartUrls  Custom start URLs (optional)
+     * @param  string|null  $notes  Profile notes (optional)
+     * @param  ProfilePartialUpdateParameters|null  $parameters  Profile parameters to update (optional)
      */
     public function partialUpdate(
-        ?string $profileId = null,
+        string $profileId,
         ?string $name = null,
-        ?string $autoUpdateCore = null,
-        ?string $coreMinorVersion = null,
-        ?string $coreVersion = null,
+        ?bool $autoUpdateCore = null,
+        ?int $coreVersion = null,
+        ?int $coreMinorVersion = null,
         ?string $tags = null,
         ?ProxyData $proxy = null,
-        ?string $saveTraffic = null,
-        ?string $customStartUrls = null,
+        ?array $customStartUrls = null,
         ?string $notes = null,
-        ?string $parameters = null,
-        ?string $flags = null,
-        ?string $webrtcMasking = null,
-        ?string $audioMaskingGraphicsNoisePortsMasking = null,
-        ?string $proxyMasking = null,
-        ?string $geolocationPopup = null,
-        ?string $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMasking = null,
-        ?string $geolocationMasking = null,
-        ?string $quicMode = null,
-        ?string $canvasNoise = null,
-        ?string $startupBehavior = null,
-        ?string $isLocal = null,
-        ?string $saveServiceWorker = null,
-        ?string $fingerprint = null,
-        ?string $hardwareConcurrency = null,
-        ?string $userAgent = null,
-        ?string $platform = null,
-        ?string $osCpu = null,
-        ?string $acceptLanguages = null,
-        ?string $languages = null,
-        ?string $locale = null,
-        ?string $zone = null,
-        ?string $vendor = null,
-        ?string $renderer = null,
-        ?string $vendorId = null,
-        ?string $rendererId = null,
-        ?string $publicIp = null,
-        ?string $audioOutputs = null,
-        ?string $audioInputs = null,
-        ?string $videoInputs = null,
-        ?string $width = null,
-        ?string $height = null,
-        ?string $pixelRatio = null,
-        ?string $accuracy = null,
-        ?string $altitude = null,
-        ?string $latitude = null,
-        ?string $longitude = null,
-        ?string $ports = null,
-        ?string $fonts = null,
-        ?string $cmdParams = null,
-        ?string $maxTouchPoints = null,
-        ?string $contentType = null,
-        ?string $accept = null,
+        ?ProfilePartialUpdateParameters $parameters = null,
     ): Response {
-        return $this->connector->send(new ProfilePartialUpdate($profileId, $name, $autoUpdateCore, $coreMinorVersion, $coreVersion, $tags, $proxy, $saveTraffic, $customStartUrls, $notes, $parameters, $flags, $webrtcMasking, $audioMaskingGraphicsNoisePortsMasking, $proxyMasking, $geolocationPopup, $navigatorMaskingLocalizationMaskingTimezoneMaskingGraphicsMaskingFontsMaskingMediaDevicesMaskingScreenMasking, $geolocationMasking, $quicMode, $canvasNoise, $startupBehavior, $isLocal, $saveServiceWorker, $fingerprint, $hardwareConcurrency, $userAgent, $platform, $osCpu, $acceptLanguages, $languages, $locale, $zone, $vendor, $renderer, $vendorId, $rendererId, $publicIp, $audioOutputs, $audioInputs, $videoInputs, $width, $height, $pixelRatio, $accuracy, $altitude, $latitude, $longitude, $ports, $fonts, $cmdParams, $maxTouchPoints, $contentType, $accept));
+        return $this->connector->send(new ProfilePartialUpdate(
+            $profileId,
+            $name,
+            $autoUpdateCore,
+            $coreVersion,
+            $coreMinorVersion,
+            $tags,
+            $proxy,
+            $customStartUrls,
+            $notes,
+            $parameters
+        ));
     }
 
     /**
-     * @param  mixed  $ids
-     * @param  string  $ids  `Required`. Specify the ID of the profile you would like to restore.
+     * @param  string|array  $ids  `Required`. Specify the ID of the profile you would like to restore.
      */
-    public function restore(?string $ids = null, ?string $contentType = null, ?string $accept = null): Response
+    public function restore(string|array $ids): Response
     {
-        return $this->connector->send(new ProfileRestore($ids, $ids, $contentType, $accept));
+        return $this->connector->send(new ProfileRestore($ids));
     }
 
     /**
@@ -391,9 +233,9 @@ class ProfileManagement extends BaseResource
     /**
      * @param  string  $metaId  `Required`. Specify the profile id.
      */
-    public function summary(?string $metaId = null, ?string $contentType = null, ?string $accept = null): Response
+    public function summary(string $metaId): Response
     {
-        return $this->connector->send(new ProfileSummary($metaId, $contentType, $accept));
+        return $this->connector->send(new ProfileSummary($metaId));
     }
 
     /**
@@ -404,29 +246,26 @@ class ProfileManagement extends BaseResource
     public function clone(
         ?string $profileId = null,
         ?string $times = null,
-        ?string $contentType = null,
-        ?string $accept = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new ProfileClone($profileId, $times, $contentType, $accept, $xStrictMode));
+        return $this->connector->send(new ProfileClone($profileId, $times, $xStrictMode));
     }
 
     /**
+     * @param  string  $profileId  `Required`. Specify the profile id.
      * @param  string  $convertToLocal  `Required`. True if you want to convert from cloud to local and false otherwise.
      * @param  string  $workspaceId  `Required`. Specify the workspace id.
      */
     public function convert(
         string $profileId,
-        ?string $convertToLocal = null,
-        ?string $workspaceId = null,
-        ?string $contentType = null,
-        ?string $accept = null,
+        bool $convertToLocal,
+        string $workspaceId,
     ): Response {
-        return $this->connector->send(new ProfileConvert($profileId, $convertToLocal, $workspaceId, $contentType, $accept));
+        return $this->connector->send(new ProfileConvert($profileId, $convertToLocal, $workspaceId));
     }
 
-    public function screenResolution(?string $accept = null): Response
+    public function screenResolution(): Response
     {
-        return $this->connector->send(new ScreenResolution($accept));
+        return $this->connector->send(new ScreenResolution);
     }
 }

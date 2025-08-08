@@ -22,25 +22,16 @@ class ProfileRestore extends Request implements HasBody
     }
 
     /**
-     * @param  null|mixed  $ids
-     * @param  null|string  $ids  `Required`. Specify the ID of the profile you would like to restore.
+     * @param  string|array  $ids  `Required`. Specify the ID of the profile you would like to restore.
      */
     public function __construct(
-        protected ?string $ids = null,
+        protected string|array $ids,
     ) {}
 
     public function defaultBody(): array
     {
-        return array_filter(['ids' => $this->ids]);
-    }
-
-    public function defaultQuery(): array
-    {
-        return array_filter(['ids' => $this->ids]);
-    }
-
-    public function defaultHeaders(): array
-    {
-        return array_filter([]);
+        return array_filter([
+            'ids' => is_array($this->ids) ? $this->ids : [$this->ids],
+        ]);
     }
 }

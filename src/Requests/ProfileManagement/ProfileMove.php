@@ -22,28 +22,21 @@ class ProfileMove extends Request implements HasBody
     }
 
     /**
-     * @param  null|mixed  $destFolderId
-     * @param  null|mixed  $ids
-     * @param  null|string  $destFolderId  `Required`. Specify the folder, to which profiles will be moved.
-     * @param  null|string  $ids  `Required`. Provide a list of profiles to be moved. Max number of IDs is 20.
+     * @param  string  $destFolderId  `Required`. Specify the folder, to which profiles will be moved.
+     * @param  string|array  $ids  `Required`. Provide a list of profiles to be moved. Max number of IDs is 20.
      */
     public function __construct(
-        protected ?string $destFolderId = null,
-        protected ?string $ids = null,
+        protected string $destFolderId,
+        protected string|array $ids,
     ) {}
 
     public function defaultBody(): array
     {
-        return array_filter(['dest_folder_id' => $this->destFolderId, 'ids' => $this->ids]);
-    }
+        $ids = is_array($this->ids) ? $this->ids : [$this->ids];
 
-    public function defaultQuery(): array
-    {
-        return array_filter(['dest_folder_id' => $this->destFolderId, 'ids' => $this->ids]);
-    }
-
-    public function defaultHeaders(): array
-    {
-        return array_filter([]);
+        return array_filter([
+            'dest_folder_id' => $this->destFolderId,
+            'ids' => $ids,
+        ]);
     }
 }

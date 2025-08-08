@@ -22,22 +22,21 @@ class ProfileConvert extends Request implements HasBody
     }
 
     /**
-     * @param  null|string  $convertToLocal  `Required`. True if you want to convert from cloud to local and false otherwise.
-     * @param  null|string  $workspaceId  `Required`. Specify the workspace id.
+     * @param  string  $profileId  `Required`. Specify the profile id.
+     * @param  bool  $convertToLocal  `Required`. True if you want to convert from cloud to local and false otherwise.
+     * @param  string  $workspaceId  `Required`. Specify the workspace id.
      */
     public function __construct(
         protected string $profileId,
-        protected ?string $convertToLocal = null,
-        protected ?string $workspaceId = null,
+        protected bool $convertToLocal,
+        protected string $workspaceId,
     ) {}
 
-    public function defaultQuery(): array
+    public function defaultBody(): array
     {
-        return array_filter(['convert_to_local' => $this->convertToLocal, 'workspace_id' => $this->workspaceId]);
-    }
-
-    public function defaultHeaders(): array
-    {
-        return array_filter([]);
+        return array_filter([
+            'convert_to_local' => $this->convertToLocal,
+            'workspace_id' => $this->workspaceId,
+        ]);
     }
 }
