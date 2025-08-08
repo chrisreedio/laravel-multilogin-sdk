@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Resource;
 
+use ChrisReedIO\MultiloginSDK\Enums\ExpirationPeriod;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement\UserChangePassword;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement\UserRefreshTokenSwitchWorkspace;
 use ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement\UserRevokeToken;
@@ -153,15 +154,14 @@ class ProfileAccessManagement extends BaseResource
     }
 
     /**
-     * @param  string  $expirationPeriod  `Required`. Specify the token lifetime. Defaults to `24h`.
+     * @param  ?ExpirationPeriod  $expirationPeriod  `Required`. Specify the token lifetime. Defaults to `24h`.
      * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function workspaceAutomationToken(
-        ?string $expirationPeriod = null,
-        ?string $accept = null,
+        ?ExpirationPeriod $expirationPeriod = null,
         ?string $xStrictMode = null,
     ): Response {
-        return $this->connector->send(new WorkspaceAutomationToken($expirationPeriod, $accept, $xStrictMode));
+        return $this->connector->send(new WorkspaceAutomationToken($expirationPeriod, $xStrictMode));
     }
 
     /**

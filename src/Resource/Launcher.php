@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Resource;
 
+use ChrisReedIO\MultiloginSDK\Enums\AutomationType;
 use ChrisReedIO\MultiloginSDK\Requests\Launcher\BrowserCoreList;
 use ChrisReedIO\MultiloginSDK\Requests\Launcher\ConvertQbpToProfile;
 use ChrisReedIO\MultiloginSDK\Requests\Launcher\CookieExport;
@@ -26,14 +27,14 @@ use Saloon\Http\Response;
 class Launcher extends BaseResource
 {
     /**
-     * @param  string  $automationType  `Optional`. Specify the automation type. Mimic can work with any of the types. Stealthfox can only work with **selenium**. Defaults to `selenium`.
-     * @param  string  $headlessMode  `Optional`. Enable headless mode for all browsers. Defaults to `false`.
-     * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     * @param  ?AutomationType  $automationType  `Optional`. Specify the automation type. Mimic can work with any of the types. Stealthfox can only work with **selenium**. Defaults to `selenium`.
+     * @param  ?string  $headlessMode  `Optional`. Enable headless mode for all browsers. Defaults to `false`.
+     * @param  ?string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function startBrowserProfile(
         string $folderId,
         string $profileId,
-        ?string $automationType = null,
+        ?AutomationType $automationType = null,
         ?string $headlessMode = null,
         ?string $accept = null,
         ?string $xStrictMode = null,

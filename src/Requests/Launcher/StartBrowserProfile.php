@@ -2,6 +2,7 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\Launcher;
 
+use ChrisReedIO\MultiloginSDK\Enums\AutomationType;
 use ChrisReedIO\MultiloginSDK\Enums\MultiloginDomain;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -26,14 +27,14 @@ class StartBrowserProfile extends Request
     public function __construct(
         protected string $folderId,
         protected string $profileId,
-        protected ?string $automationType = null,
+        protected ?AutomationType $automationType = null,
         protected ?string $headlessMode = null,
         protected ?string $xStrictMode = null,
     ) {}
 
     public function defaultQuery(): array
     {
-        return array_filter(['automation_type' => $this->automationType, 'headless_mode' => $this->headlessMode]);
+        return array_filter(['automation_type' => $this->automationType?->value, 'headless_mode' => $this->headlessMode]);
     }
 
     public function defaultHeaders(): array

@@ -9,7 +9,7 @@ abstract class BaseRequest extends Request
 {
     protected ?string $dataSubKey = null;
 
-    public function createDtoFromResponse(Response $response): array
+    public function createDtoFromResponse(Response $response): mixed
     {
         $dataKey = $this->dataSubKey ? "data.{$this->dataSubKey}" : 'data';
 

@@ -2,15 +2,18 @@
 
 namespace ChrisReedIO\MultiloginSDK\Requests\ProfileAccessManagement;
 
+use ChrisReedIO\MultiloginSDK\Enums\ExpirationPeriod;
+use ChrisReedIO\MultiloginSDK\Requests\BaseRequest;
 use Saloon\Enums\Method;
-use Saloon\Http\Request;
 
 /**
  * Workspace Automation Token
  */
-class WorkspaceAutomationToken extends Request
+class WorkspaceAutomationToken extends BaseRequest
 {
     protected Method $method = Method::GET;
+
+    protected ?string $dataSubKey = 'token';
 
     public function resolveEndpoint(): string
     {
@@ -22,13 +25,13 @@ class WorkspaceAutomationToken extends Request
      * @param  null|string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function __construct(
-        protected ?string $expirationPeriod = null,
+        protected ?ExpirationPeriod $expirationPeriod = null,
         protected ?string $xStrictMode = null,
     ) {}
 
     public function defaultQuery(): array
     {
-        return array_filter(['expiration_period' => $this->expirationPeriod]);
+        return array_filter(['expiration_period' => $this->expirationPeriod?->value]);
     }
 
     public function defaultHeaders(): array
