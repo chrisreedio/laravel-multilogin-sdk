@@ -30,7 +30,7 @@ class UserRefreshTokenSwitchWorkspace extends Request implements HasBody
     public function __construct(
         protected string $email,
         protected string $refreshToken,
-        protected string $workspaceId,
+        protected ?string $workspaceId = null,
         protected bool $xStrictMode = false,
     ) {}
 

@@ -61,7 +61,7 @@ class ProfileAccessManagement extends BaseResource
     public function userRefreshTokenSwitchWorkspace(
         string $email,
         string $refreshToken,
-        string $workspaceId,
+        ?string $workspaceId = null,
         bool $xStrictMode = false,
     ): Response {
         $response = $this->connector->send(new UserRefreshTokenSwitchWorkspace($email, $refreshToken, $workspaceId, $xStrictMode));
