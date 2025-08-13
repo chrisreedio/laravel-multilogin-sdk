@@ -25,18 +25,14 @@ use Saloon\Http\Response;
 class ProfileAccessManagement extends BaseResource
 {
     /**
-     * @param  mixed  $email
-     * @param  mixed  $password
      * @param  string  $email  `Required`. Enter your account email.
-     * @param  string  $password  `Required`. Enter your account password.
+     * @param  string  $password  `Required`. Enter your account password. This should already be md5 hashed.
      */
     public function userSignIn(
         ?string $email = null,
         ?string $password = null,
-        ?string $contentType = null,
-        ?string $accept = null,
     ): Response {
-        $response = $this->connector->send(new UserSignIn($email, $password, $email, $password, $contentType, $accept));
+        $response = $this->connector->send(new UserSignIn($email, $password));
 
         if ($response->failed()) {
             return $response;
@@ -57,9 +53,6 @@ class ProfileAccessManagement extends BaseResource
     }
 
     /**
-     * @param  mixed  $email
-     * @param  mixed  $refreshToken
-     * @param  mixed  $workspaceId
      * @param  string  $email  `Required`. Enter your account email.
      * @param  string  $refreshToken  `Required`. Enter your refresh token. Can be fetched with `POST user/signin`.
      * @param  string  $workspaceId  `Required`. Specify the workspace, in which you would like to work or switch to. Can be fetched with `GET /user/workspaces`. Defaults to `current sign-in workspace`.
@@ -69,11 +62,9 @@ class ProfileAccessManagement extends BaseResource
         ?string $email = null,
         ?string $refreshToken = null,
         ?string $workspaceId = null,
-        ?string $contentType = null,
-        ?string $accept = null,
         ?string $xStrictMode = null,
     ): Response {
-        $response = $this->connector->send(new UserRefreshTokenSwitchWorkspace($email, $refreshToken, $workspaceId, $email, $refreshToken, $workspaceId, $contentType, $accept, $xStrictMode));
+        $response = $this->connector->send(new UserRefreshTokenSwitchWorkspace($email, $refreshToken, $workspaceId, $xStrictMode));
 
         if ($response->failed()) {
             return $response;
@@ -91,33 +82,27 @@ class ProfileAccessManagement extends BaseResource
     }
 
     /**
-     * @param  string  $token  `Optional`. Specify the token to revoke. Defaults to `current token`.
-     * @param  string  $isAutomation  `Optional`. Specify the token type to revoke. Defaults to `false`.
-     * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     * @param  ?string  $token  `Optional`. Specify the token to revoke. Defaults to `current token`.
+     * @param  bool  $isAutomation  `Optional`. Specify the token type to revoke. Defaults to `false`.
+     * @param  bool  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function userRevokeToken(
         ?string $token = null,
-        ?string $isAutomation = null,
-        ?string $contentType = null,
-        ?string $accept = null,
-        ?string $xStrictMode = null,
+        bool $isAutomation = false,
+        bool $xStrictMode = false,
     ): Response {
-        return $this->connector->send(new UserRevokeToken($token, $isAutomation, $contentType, $accept, $xStrictMode));
+        return $this->connector->send(new UserRevokeToken($token, $isAutomation, $xStrictMode));
     }
 
     /**
-     * @param  mixed  $newPassword
-     * @param  mixed  $password
      * @param  string  $newPassword  `Required`. Enter your new password.
      * @param  string  $password  `Required`. Enter your current password.
      */
     public function userChangePassword(
         ?string $newPassword = null,
         ?string $password = null,
-        ?string $contentType = null,
-        ?string $accept = null,
     ): Response {
-        return $this->connector->send(new UserChangePassword($newPassword, $password, $newPassword, $password, $contentType, $accept));
+        return $this->connector->send(new UserChangePassword($newPassword, $password));
     }
 
     public function userWorkspaces(?string $accept = null): Response

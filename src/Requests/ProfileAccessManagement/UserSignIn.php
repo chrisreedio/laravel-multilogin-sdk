@@ -23,29 +23,17 @@ class UserSignIn extends Request implements HasBody
     }
 
     /**
-     * @param  null|mixed  $email
-     * @param  null|mixed  $password
-     * @param  null|string  $email  `Required`. Enter your account email.
-     * @param  null|string  $password  `Required`. Enter your account password.
+     * @param  string  $email  `Required`. Enter your account email.
+     * @param  string  $password  `Required`. Enter your account password. This
      */
     public function __construct(
-        protected ?string $email = null,
-        protected ?string $password = null,
+        protected string $email,
+        protected string $password,
     ) {}
 
     public function defaultBody(): array
     {
         return array_filter(['email' => $this->email, 'password' => $this->password]);
-    }
-
-    public function defaultQuery(): array
-    {
-        return array_filter(['email' => $this->email, 'password' => $this->password]);
-    }
-
-    public function defaultHeaders(): array
-    {
-        return array_filter([]);
     }
 
     public function defaultAuth(): ?NullAuthenticator

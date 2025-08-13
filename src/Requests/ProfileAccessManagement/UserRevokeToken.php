@@ -22,19 +22,22 @@ class UserRevokeToken extends Request implements HasBody
     }
 
     /**
-     * @param  null|string  $token  `Optional`. Specify the token to revoke. Defaults to `current token`.
-     * @param  null|string  $isAutomation  `Optional`. Specify the token type to revoke. Defaults to `false`.
-     * @param  null|string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     * @param  ?string  $token  `Optional`. Specify the token to revoke. Defaults to `current token`.
+     * @param  bool  $isAutomation  `Optional`. Specify the token type to revoke. Defaults to `false`.
+     * @param  bool  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function __construct(
         protected ?string $token = null,
-        protected ?string $isAutomation = null,
-        protected ?string $xStrictMode = null,
+        protected bool $isAutomation = false,
+        protected bool $xStrictMode = false,
     ) {}
 
-    public function defaultQuery(): array
+    public function defaultBody(): array
     {
-        return array_filter(['token' => $this->token, 'is_automation' => $this->isAutomation]);
+        return array_filter([
+            'token' => $this->token,
+            'is_automation' => $this->isAutomation,
+        ]);
     }
 
     public function defaultHeaders(): array
