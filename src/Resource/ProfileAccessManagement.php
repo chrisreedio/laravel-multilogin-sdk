@@ -56,13 +56,13 @@ class ProfileAccessManagement extends BaseResource
      * @param  string  $email  `Required`. Enter your account email.
      * @param  string  $refreshToken  `Required`. Enter your refresh token. Can be fetched with `POST user/signin`.
      * @param  string  $workspaceId  `Required`. Specify the workspace, in which you would like to work or switch to. Can be fetched with `GET /user/workspaces`. Defaults to `current sign-in workspace`.
-     * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     * @param  bool  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function userRefreshTokenSwitchWorkspace(
-        ?string $email = null,
-        ?string $refreshToken = null,
-        ?string $workspaceId = null,
-        ?string $xStrictMode = null,
+        string $email,
+        string $refreshToken,
+        string $workspaceId,
+        bool $xStrictMode = false,
     ): Response {
         $response = $this->connector->send(new UserRefreshTokenSwitchWorkspace($email, $refreshToken, $workspaceId, $xStrictMode));
 
