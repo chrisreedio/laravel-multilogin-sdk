@@ -17,18 +17,16 @@ class PreMadeCookies extends BaseResource
     }
 
     /**
-     * @param  mixed  $profileId
-     * @param  mixed  $targetWebsite
      * @param  string  $profileId  `Required`
      * @param  string  $targetWebsite  `Required`. Defaults to `mix`.
-     * @param  string  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
+     * @param  bool  $xStrictMode  Default to false. If set to true, you must specify values for all required parameters.
      */
     public function createCookiesMetadata(
-        ?string $profileId = null,
-        ?string $targetWebsite = null,
-        ?string $xStrictMode = null,
+        string $profileId,
+        string $targetWebsite = 'mix',
+        bool $xStrictMode = false,
     ): Response {
-        return $this->connector->send(new CreateCookiesMetadata($profileId, $targetWebsite, $profileId, $targetWebsite, $xStrictMode));
+        return $this->connector->send(new CreateCookiesMetadata($profileId, $targetWebsite, $xStrictMode));
     }
 
     public function cookiesList(): Response
